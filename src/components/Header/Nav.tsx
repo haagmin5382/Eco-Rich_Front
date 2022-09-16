@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const NavContainer = styled.nav`
   display: flex;
@@ -23,8 +24,10 @@ const NavContainer = styled.nav`
       text-align: center;
       width: 100%;
       transition: 0.4s;
+
       :hover {
         color: gray;
+        background-color: #ffffff;
         border-bottom: 5px solid gray;
       }
     }
@@ -32,12 +35,31 @@ const NavContainer = styled.nav`
 `;
 
 function Nav() {
+  const navigate = useNavigate();
   return (
     <NavContainer>
       <ul>
-        <li>Home</li>
-        <li>게시판</li>
-        <li>로그인</li>
+        <li
+          onClick={() => navigate('/mypage')}
+          onKeyDown={() => navigate('/mypage')}
+          role="tab"
+        >
+          Home
+        </li>
+        <li
+          onClick={() => navigate('/login')}
+          onKeyDown={() => navigate('/login')}
+          role="tab"
+        >
+          게시판
+        </li>
+        <li
+          onClick={() => navigate('/mypage')}
+          onKeyDown={() => navigate('/mypage')}
+          role="tab"
+        >
+          MyPage
+        </li>
       </ul>
     </NavContainer>
   );
