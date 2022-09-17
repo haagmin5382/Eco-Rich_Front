@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import { AiOutlineUser } from 'react-icons/ai';
 import { FcMenu } from 'react-icons/fc';
+import { useDispatch } from 'react-redux';
+import { openAndClose } from 'redux/menu';
+
 const NavContainer = styled.nav`
   display: flex;
   justify-content: space-between;
@@ -31,7 +32,6 @@ const NavContainer = styled.nav`
       cursor: pointer;
       text-align: center;
       font-size: 1vw 1vh;
-      transition: 0.4s;
       padding-top: 1.5vh;
       margin-right: 2vw;
     }
@@ -39,13 +39,17 @@ const NavContainer = styled.nav`
 `;
 
 function Nav() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const openAndCloseMenu = () => {
+    dispatch(openAndClose({ sideMenu: true }));
+  };
 
   return (
     <NavContainer>
       <a href="/">TITLE</a>
       <ul>
-        <li>
+        <li onClick={openAndCloseMenu} onKeyDown={openAndCloseMenu} role="tab">
           <FcMenu size="70%" />
         </li>
       </ul>
