@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineUser } from 'react-icons/ai';
-import { GrLogin } from 'react-icons/gr';
-
+import { FcMenu } from 'react-icons/fc';
 const NavContainer = styled.nav`
   display: flex;
+  justify-content: space-between;
   width: 100vw;
   height: 8vh;
   line-height: 8vh;
@@ -13,17 +13,15 @@ const NavContainer = styled.nav`
   a {
     text-decoration: none;
     color: 'green';
-    font-size: 3vw;
+    font-size: 4vh;
     font-weight: bold;
-    width: 20%;
+    width: 30%;
   }
   a:visited {
     color: 'green';
   }
   ul {
-    width: 100%;
     display: flex;
-    justify-content: space-around;
     margin: 0;
     padding: 0;
 
@@ -32,13 +30,10 @@ const NavContainer = styled.nav`
       font-weight: bold;
       cursor: pointer;
       text-align: center;
-      width: 100%;
+      font-size: 1vw 1vh;
       transition: 0.4s;
-
-      :hover {
-        color: #ffffff;
-        background-color: gray;
-      }
+      padding-top: 1.5vh;
+      margin-right: 2vw;
     }
   }
 `;
@@ -50,23 +45,9 @@ function Nav() {
     <NavContainer>
       <a href="/">TITLE</a>
       <ul>
-        <li
-          onClick={() => navigate('/login')}
-          onKeyDown={() => navigate('/login')}
-          role="tab"
-        >
-          게시판
+        <li>
+          <FcMenu size="70%" />
         </li>
-        <li
-          onClick={() => navigate('/mypage')}
-          onKeyDown={() => navigate('/mypage')}
-          role="tab"
-        >
-          MyPage
-        </li>
-        <a href="/login">
-          <AiOutlineUser color="black" size="50%" />
-        </a>
       </ul>
     </NavContainer>
   );
