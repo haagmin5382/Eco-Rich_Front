@@ -4,7 +4,6 @@ import Home from 'pages/Home';
 import Login from 'pages/Login';
 import SignUp from 'pages/SignUp';
 import Mypage from 'pages/Mypage';
-import UserMenu from './UserMenu';
 function Router() {
   return (
     <div>
@@ -15,7 +14,6 @@ function Router() {
           <Route element={<SignUp />} path="/signup" />
           <Route element={<Mypage />} path="/mypage" />
         </Routes>
-        <UserMenu />
       </BrowserRouter>
     </div>
   );

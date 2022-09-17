@@ -1,22 +1,32 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { AiOutlineUser } from 'react-icons/ai';
+import { GrLogin } from 'react-icons/gr';
 
 const NavContainer = styled.nav`
   display: flex;
   width: 100vw;
-  height: 10vh;
-  line-height: 10vh;
-  background-color: #74c8fd;
-
-  color: #ffffff;
-
+  height: 8vh;
+  line-height: 8vh;
+  box-shadow: 1px 1px 5px gray;
+  a {
+    text-decoration: none;
+    color: 'green';
+    font-size: 3vw;
+    font-weight: bold;
+    width: 20%;
+  }
+  a:visited {
+    color: 'green';
+  }
   ul {
     width: 100%;
     display: flex;
     justify-content: space-around;
     margin: 0;
     padding: 0;
+
     li {
       list-style: none;
       font-weight: bold;
@@ -26,9 +36,8 @@ const NavContainer = styled.nav`
       transition: 0.4s;
 
       :hover {
-        color: gray;
-        background-color: #ffffff;
-        border-bottom: 5px solid gray;
+        color: #ffffff;
+        background-color: gray;
       }
     }
   }
@@ -36,16 +45,11 @@ const NavContainer = styled.nav`
 
 function Nav() {
   const navigate = useNavigate();
+
   return (
     <NavContainer>
+      <a href="/">TITLE</a>
       <ul>
-        <li
-          onClick={() => navigate('/mypage')}
-          onKeyDown={() => navigate('/mypage')}
-          role="tab"
-        >
-          Home
-        </li>
         <li
           onClick={() => navigate('/login')}
           onKeyDown={() => navigate('/login')}
@@ -60,6 +64,9 @@ function Nav() {
         >
           MyPage
         </li>
+        <a href="/login">
+          <AiOutlineUser color="black" size="50%" />
+        </a>
       </ul>
     </NavContainer>
   );
