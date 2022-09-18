@@ -99,7 +99,7 @@ const Timer = () => {
           }
         }
       }
-    }, 10);
+    }, 1000);
     return () => {
       clearInterval(countdown);
     };
@@ -108,11 +108,11 @@ const Timer = () => {
   return (
     <main>
       <CardContent sx={{ textAlign: 'center' }}>
+        <Stepper minutes={minutes} rest={rest} />
         <Typography color="text.secondary" sx={{ mb: 1.5, fontSize: '5vw' }}>
-          <div>
+          <>
             {minutes}:{seconds === 0 ? '00' : seconds}
-          </div>
-          <Stepper minutes={minutes} rest={rest} />
+          </>
         </Typography>
         {start ? (
           <Button

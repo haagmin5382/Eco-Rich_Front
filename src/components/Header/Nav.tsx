@@ -18,10 +18,7 @@ const NavContainer = styled.nav`
     font-weight: bold;
     margin-left: 5%;
   }
-  a:visited {
-    text-decoration: none;
-    color: #ffffff;
-  }
+
   ul {
     display: flex;
     margin: 0;
@@ -40,7 +37,6 @@ const NavContainer = styled.nav`
 `;
 
 function Nav() {
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const openAndCloseMenu = () => {
     dispatch(openAndClose({ sideMenu: true }));

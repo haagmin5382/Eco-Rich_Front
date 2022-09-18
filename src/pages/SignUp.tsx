@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -12,6 +10,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
@@ -20,6 +20,8 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [passwordConfirmed, setPasswordConfirmed] = useState('');
+  const auth = getAuth();
+  const navigate = useNavigate();
 
   const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -36,14 +38,37 @@ export default function SignUp() {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({
-      email: email,
-      name: name,
-      password: password,
-      passwordConfirmed: passwordConfirmed,
-    });
+
+    if (
+      email &&
+      name &&
+      password &&
+      passwordConfirmed &&
+      password === passwordConfirmed
+    ) {
+      await createUserWithEmailAndPassword(auth, email, password)
+        .then(() => navigate('/login'))
+        .catch((error) => {
+          console.log(error.message);
+          if (
+            error.message === 'Firebase: Error (auth/email-already-in-use).'
+          ) {
+            console.log('이미 존재하는 메일입니다.');
+          }
+          if (
+            error.message ===
+            'Firebase: Password should be at least 6 characters (auth/weak-password).'
+          ) {
+            console.log('비밀번호는 최소 6자리 이상이어야 합니다.');
+          }
+        });
+    } else if (password !== passwordConfirmed) {
+      console.log('비밀번호가 다릅니다.');
+    } else {
+      console.log('모든값은 필수 입니다.');
+    }
   };
 
   return (
@@ -62,7 +87,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            회원 가입
           </Typography>
           <Box
             component="form"
@@ -76,7 +101,7 @@ export default function SignUp() {
                   autoComplete="email"
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="이메일"
                   name="email"
                   onChange={changeInput}
                   required
@@ -87,7 +112,7 @@ export default function SignUp() {
                   autoComplete="name"
                   fullWidth
                   id="name"
-                  label="Name"
+                  label="이름"
                   name="name"
                   onChange={changeInput}
                   required
@@ -98,7 +123,7 @@ export default function SignUp() {
                   autoComplete="new-password"
                   fullWidth
                   id="password"
-                  label="Password"
+                  label="비밀번호"
                   name="password"
                   onChange={changeInput}
                   required
@@ -110,19 +135,11 @@ export default function SignUp() {
                   autoComplete="confirm-password"
                   fullWidth
                   id="ConfirmPassword"
-                  label="Confirm Password"
+                  label="비밀번호 확인"
                   name="ConfirmPassword"
                   onChange={changeInput}
                   required
                   type="password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox color="primary" value="allowExtraEmails" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
                 />
               </Grid>
             </Grid>
@@ -132,7 +149,7 @@ export default function SignUp() {
               type="submit"
               variant="contained"
             >
-              Sign Up
+              회원 가입
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
