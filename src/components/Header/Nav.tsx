@@ -16,7 +16,6 @@ const NavContainer = styled.nav`
     color: #ffffff;
     font-size: 4vh;
     font-weight: bold;
-    width: 100%;
     margin-left: 5%;
   }
   a:visited {
@@ -49,7 +48,7 @@ function Nav() {
 
   return (
     <NavContainer>
-      <a href="/">Pomodoro Study</a>
+      <a href="/">Pomodoro</a>
       <ul>
         <li onClick={openAndCloseMenu} onKeyDown={openAndCloseMenu} role="tab">
           <MenuIcon sx={{ color: 'white', fontSize: 30 }} />
