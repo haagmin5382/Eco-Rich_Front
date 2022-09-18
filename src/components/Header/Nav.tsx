@@ -50,7 +50,7 @@ function Nav() {
       <a href="/">TITLE</a>
       <ul>
         <li onClick={openAndCloseMenu} onKeyDown={openAndCloseMenu} role="tab">
-          <FcMenu size="70%" />
+          <FcMenu size="80%" />
         </li>
       </ul>
     </NavContainer>
