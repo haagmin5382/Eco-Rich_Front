@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import CloseIcon from '@mui/icons-material/Close';
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
@@ -33,35 +30,36 @@ export default function TemporaryDrawer() {
     dispatch(openAndClose({ sideMenu: false }));
   };
   const goToPage = (page: string) => {
-    console.log('이동');
-
     if (page === '로그인') {
       navigate('/login');
     }
     if (page === '회원가입') {
       navigate('/signup');
     }
-    if (page === '게시판') {
-      navigate('/login');
-    }
   };
 
   const list = (anchor: any) => (
     <Box
-      onClick={toggleDrawer}
-      onKeyDown={toggleDrawer}
       role="presentation"
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
     >
       <List>
-        <CloseIcon sx={{ position: 'relative', left: 210 }} />
-        {['로그인', '회원가입', '게시판', 'Drafts'].map((text, index) => (
-          <ListItem disablePadding key={text}>
+        <CloseIcon
+          onClick={toggleDrawer}
+          onKeyDown={toggleDrawer}
+          sx={{ position: 'relative', left: 210, cursor: 'pointer' }}
+        />
+        {['로그인', '회원가입'].map((text) => (
+          <ListItem
+            disablePadding
+            key={text}
+            onClick={toggleDrawer}
+            onKeyDown={toggleDrawer}
+          >
             <ListItemButton onClick={() => goToPage(text)}>
               <ListItemIcon>
                 {text === '로그인' && <LoginIcon />}
                 {text === '회원가입' && <PersonAddAltIcon />}
-                {text === '게시판' && <ForumIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -70,12 +68,10 @@ export default function TemporaryDrawer() {
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        {['게시판', 'Trash', 'Spam'].map((text) => (
           <ListItem disablePadding key={text}>
             <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
+              <ListItemIcon>{text === '게시판' && <ForumIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
