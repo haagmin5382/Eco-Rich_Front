@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FcMenu } from 'react-icons/fc';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useDispatch } from 'react-redux';
 import { openAndClose } from 'redux/menu';
 
@@ -13,13 +13,15 @@ const NavContainer = styled.nav`
   box-shadow: 1px 1px 5px gray;
   a {
     text-decoration: none;
-    color: 'green';
+    color: #ffffff;
     font-size: 4vh;
     font-weight: bold;
-    width: 30%;
+    width: 100%;
+    margin-left: 5%;
   }
   a:visited {
-    color: 'green';
+    text-decoration: none;
+    color: #ffffff;
   }
   ul {
     display: flex;
@@ -47,10 +49,10 @@ function Nav() {
 
   return (
     <NavContainer>
-      <a href="/">TITLE</a>
+      <a href="/">Pomodoro Study</a>
       <ul>
         <li onClick={openAndCloseMenu} onKeyDown={openAndCloseMenu} role="tab">
-          <FcMenu size="80%" />
+          <MenuIcon sx={{ color: 'white', fontSize: 30 }} />
         </li>
       </ul>
     </NavContainer>
