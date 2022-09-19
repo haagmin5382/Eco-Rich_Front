@@ -105,7 +105,7 @@ function Mypage() {
       <ProfileContainer>
         <h1>My Profile</h1>
         <form>
-          <label htmlFor="profilePhoto">
+          <label htmlFor="profilePhoto" style={{ display: 'inline-block' }}>
             <Avatar
               src={newPhotoURL ? newPhotoURL : userProfile.photoURL}
               sx={{
@@ -117,6 +117,7 @@ function Mypage() {
             />
           </label>
         </form>
+
         <input
           accept="image/*"
           id="profilePhoto"

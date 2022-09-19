@@ -15,6 +15,7 @@ function Router() {
   const dispatch = useDispatch();
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
+      console.log(user);
       dispatch(
         userReducer({
           email: user?.email,
