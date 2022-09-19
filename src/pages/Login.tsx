@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -12,12 +10,22 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { authService } from 'fbase';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const auth = getAuth();
+  const navigate = useNavigate();
 
   const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -30,13 +38,33 @@ export default function Login() {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    console.log({
-      email: email,
-      password: password,
-    });
+    if (!email) {
+      console.log('이메일을 입력하세요');
+    } else if (!password) {
+      console.log('비밀번호를 입력하세요');
+    } else {
+      await signInWithEmailAndPassword(auth, email, password)
+        .then(() => navigate('/'))
+        .catch((error) => {
+          if (error.message === 'Firebase: Error (auth/user-not-found).') {
+            console.log('아이디가 없습니다.');
+          } else {
+            console.log('비밀번호가 다릅니다.');
+          }
+        });
+    }
+  };
+  const socialLogin = async (e: React.MouseEvent<HTMLElement>) => {
+    let provider;
+    const evnetTarget = e.target as HTMLButtonElement;
+    console.log(evnetTarget.name);
+    if (evnetTarget.name === 'google') {
+      provider = new GoogleAuthProvider();
+      await signInWithPopup(authService, provider);
+      navigate('/');
+    }
   };
 
   return (
@@ -55,7 +83,7 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            로그인
           </Typography>
           <Box
             component="form"
@@ -67,7 +95,7 @@ export default function Login() {
               autoComplete="email"
               fullWidth
               id="email"
-              label="Email Address"
+              label="이메일"
               margin="normal"
               name="email"
               onChange={changeInput}
@@ -77,34 +105,36 @@ export default function Login() {
               autoComplete="current-password"
               fullWidth
               id="password"
-              label="Password"
+              label="비밀번호"
               margin="normal"
               name="password"
               onChange={changeInput}
               required
               type="password"
             />
-            <FormControlLabel
-              control={<Checkbox color="primary" value="remember" />}
-              label="Remember me"
-            />
+
             <Button
               fullWidth
               sx={{ mt: 3, mb: 2 }}
               type="submit"
               variant="contained"
             >
-              Sign In
+              로그인
+            </Button>
+            <Button
+              fullWidth
+              name="google"
+              onClick={socialLogin}
+              sx={{ mt: 1, mb: 2 }}
+              type="button"
+              variant="contained"
+            >
+              Google 로그인
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
                 <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  회원 가입
                 </Link>
               </Grid>
             </Grid>

@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react';
-import { useTheme } from '@mui/material/styles';
+import React, { useEffect, useState } from 'react';
 import MobileStepper from '@mui/material/MobileStepper';
 import Button from '@mui/material/Button';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { useSelector } from 'react-redux';
-
+import { reduxState } from 'App';
 export default function ProgressMobileStepper({
   minutes,
   rest,
@@ -13,9 +10,8 @@ export default function ProgressMobileStepper({
   minutes: number;
   rest: boolean;
 }) {
-  const theme = useTheme();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const pomo = useSelector((state: any) => state.pomo.value.pomoNum);
+  const [activeStep, setActiveStep] = useState(0);
+  const pomo = useSelector((state: reduxState) => state.pomo.value.pomoNum);
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -59,7 +55,7 @@ export default function ProgressMobileStepper({
         }
         position="static"
         steps={6}
-        sx={{ maxWidth: 500, flexGrow: 1, margin: '0 auto' }}
+        sx={{ maxWidth: 500, flexGrow: 1, margin: '0 auto', marginTop: '30px' }}
         variant="progress"
       />
     </>

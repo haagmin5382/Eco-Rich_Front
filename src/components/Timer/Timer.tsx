@@ -4,6 +4,7 @@ import { setPomo } from 'redux/pomo';
 import { Button } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import { reduxState } from 'App';
 import Stepper from './Stepper';
 
 const day = new Date();
@@ -18,7 +19,7 @@ const Timer = () => {
 
   //   const secondsRef = useRef(0);
   // const data = useSelector(state => state.pomo.value);
-  const pomo = useSelector((state: any) => state.pomo.value.pomoNum);
+  const pomo = useSelector((state: reduxState) => state.pomo.value.pomoNum);
   const dayPomo = useSelector((state: any) => state.pomo.value.dayPomo);
 
   const dispatch = useDispatch();
@@ -99,7 +100,7 @@ const Timer = () => {
           }
         }
       }
-    }, 10);
+    }, 1000);
     return () => {
       clearInterval(countdown);
     };
@@ -108,11 +109,11 @@ const Timer = () => {
   return (
     <main>
       <CardContent sx={{ textAlign: 'center' }}>
+        <Stepper minutes={minutes} rest={rest} />
         <Typography color="text.secondary" sx={{ mb: 1.5, fontSize: '5vw' }}>
-          <div>
+          <>
             {minutes}:{seconds === 0 ? '00' : seconds}
-          </div>
-          <Stepper minutes={minutes} rest={rest} />
+          </>
         </Typography>
         {start ? (
           <Button
