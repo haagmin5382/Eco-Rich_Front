@@ -1,9 +1,28 @@
 import React, { useState } from 'react';
-import Header from 'components/Header/Header';
 import Router from 'components/Router';
-import { authService } from 'fbase';
+import { useSelector } from 'react-redux';
+
+export interface reduxState {
+  menu: {
+    value: {
+      sideMenu: boolean;
+    };
+  };
+  pomo: {
+    value: {
+      pomoNum: Array<number>;
+    };
+  };
+  user: {
+    value: {
+      displayName: string;
+      email: string;
+      photoURL: string;
+      uid: string;
+    };
+  };
+}
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
   return (
     <>
       <Router />

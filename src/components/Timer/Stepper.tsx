@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MobileStepper from '@mui/material/MobileStepper';
 import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
-
+import { reduxState } from 'App';
 export default function ProgressMobileStepper({
   minutes,
   rest,
@@ -11,7 +11,7 @@ export default function ProgressMobileStepper({
   rest: boolean;
 }) {
   const [activeStep, setActiveStep] = useState(0);
-  const pomo = useSelector((state: any) => state.pomo.value.pomoNum);
+  const pomo = useSelector((state: reduxState) => state.pomo.value.pomoNum);
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };

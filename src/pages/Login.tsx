@@ -10,7 +10,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { authService } from 'fbase';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
@@ -48,6 +54,16 @@ export default function Login() {
             console.log('비밀번호가 다릅니다.');
           }
         });
+    }
+  };
+  const socialLogin = async (e: React.MouseEvent<HTMLElement>) => {
+    let provider;
+    const evnetTarget = e.target as HTMLButtonElement;
+    console.log(evnetTarget.name);
+    if (evnetTarget.name === 'google') {
+      provider = new GoogleAuthProvider();
+      await signInWithPopup(authService, provider);
+      navigate('/');
     }
   };
 
@@ -104,6 +120,16 @@ export default function Login() {
               variant="contained"
             >
               로그인
+            </Button>
+            <Button
+              fullWidth
+              name="google"
+              onClick={socialLogin}
+              sx={{ mt: 1, mb: 2 }}
+              type="button"
+              variant="contained"
+            >
+              Google 로그인
             </Button>
             <Grid container>
               <Grid item>

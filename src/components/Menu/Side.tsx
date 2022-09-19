@@ -9,16 +9,23 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import CloseIcon from '@mui/icons-material/Close';
 import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import ForumIcon from '@mui/icons-material/Forum';
 import { useSelector, useDispatch } from 'react-redux';
 import { openAndClose } from 'redux/menu';
 import { useNavigate } from 'react-router-dom';
+import { authService } from 'fbase';
+import { reduxState } from 'App';
 
 export default function TemporaryDrawer() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const sideMenu = useSelector((state: any) => state.menu.value.sideMenu);
+  const sideMenu = useSelector(
+    (state: reduxState) => state.menu.value.sideMenu,
+  );
+  const userInfo = useSelector((state: reduxState) => state.user.value);
 
   const toggleDrawer = (event: any) => {
     if (
@@ -36,9 +43,21 @@ export default function TemporaryDrawer() {
     if (page === '회원가입') {
       navigate('/signup');
     }
+    if (page === '로그아웃') {
+      authService.signOut();
+      navigate('/');
+    }
+    if (page === '마이페이지') {
+      navigate('/mypage');
+    }
+    if (page === '게시판') {
+      navigate('/board');
+    }
   };
-
-  const list = (anchor: any) => (
+  const itemList = userInfo.email
+    ? ['로그아웃', '마이페이지']
+    : ['로그인', '회원가입'];
+  const list = (anchor: string) => (
     <Box
       role="presentation"
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -49,7 +68,7 @@ export default function TemporaryDrawer() {
           onKeyDown={toggleDrawer}
           sx={{ position: 'relative', left: 210, cursor: 'pointer' }}
         />
-        {['로그인', '회원가입'].map((text) => (
+        {itemList.map((text: string) => (
           <ListItem
             disablePadding
             key={text}
@@ -59,7 +78,9 @@ export default function TemporaryDrawer() {
             <ListItemButton onClick={() => goToPage(text)}>
               <ListItemIcon>
                 {text === '로그인' && <LoginIcon />}
+                {text === '로그아웃' && <LogoutIcon />}
                 {text === '회원가입' && <PersonAddAltIcon />}
+                {text === '마이페이지' && <PersonOutlineIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
@@ -70,7 +91,7 @@ export default function TemporaryDrawer() {
       <List>
         {['게시판', 'Trash', 'Spam'].map((text) => (
           <ListItem disablePadding key={text}>
-            <ListItemButton>
+            <ListItemButton onClick={() => goToPage(text)}>
               <ListItemIcon>{text === '게시판' && <ForumIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>

@@ -18,7 +18,6 @@ const theme = createTheme();
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
   const [passwordConfirmed, setPasswordConfirmed] = useState('');
   const auth = getAuth();
   const navigate = useNavigate();
@@ -29,8 +28,6 @@ export default function SignUp() {
     } = e;
     if (e.target.name === 'email') {
       setEmail(value);
-    } else if (e.target.name === 'name') {
-      setName(value);
     } else if (e.target.name === 'password') {
       setPassword(value);
     } else {
@@ -43,7 +40,6 @@ export default function SignUp() {
 
     if (
       email &&
-      name &&
       password &&
       passwordConfirmed &&
       password === passwordConfirmed
@@ -109,17 +105,6 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  autoComplete="name"
-                  fullWidth
-                  id="name"
-                  label="이름"
-                  name="name"
-                  onChange={changeInput}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
                   autoComplete="new-password"
                   fullWidth
                   id="password"
@@ -154,7 +139,7 @@ export default function SignUp() {
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/login" variant="body2">
-                  Already have an account? Sign in
+                  로그인
                 </Link>
               </Grid>
             </Grid>
