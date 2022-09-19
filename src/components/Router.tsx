@@ -10,7 +10,8 @@ import { useEffect } from 'react';
 import { authService } from 'fbase';
 import { userReducer } from 'redux/user';
 import { useDispatch } from 'react-redux';
-import Board from 'pages/Board';
+import Board from 'pages/board/Board';
+import Writing from 'pages/board/Writing';
 function Router() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -36,6 +37,7 @@ function Router() {
           <Route element={<SignUp />} path="/signup" />
           <Route element={<Mypage />} path="/mypage" />
           <Route element={<Board />} path="/board" />
+          <Route element={<Writing />} path="/board/writing" />
         </Routes>
       </BrowserRouter>
     </div>

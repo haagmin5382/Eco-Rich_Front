@@ -4,10 +4,9 @@ import { reduxState } from 'App';
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import { authService, dbService, storageService } from 'fbase';
+import { authService, storageService } from 'fbase';
 import { updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-
 import { useDispatch } from 'react-redux';
 import { userReducer } from 'redux/user';
 import Avatar from '@mui/material/Avatar';
@@ -87,25 +86,23 @@ function Mypage() {
       userProfile.photoURL !== newPhotoURL &&
       authService.currentUser !== null
     ) {
-      const attachmentRef = ref(storageService, `${userProfile.uid}`);
-      console.log(attachmentRef);
+      const attachmentRef: any = ref(storageService, `${userProfile.uid}`);
       await uploadString(attachmentRef, newPhotoURL, 'data_url');
 
-      attachmentURL = await getDownloadURL(
-        ref(storageService, attachmentRef && undefined),
-      );
+      attachmentURL = await getDownloadURL(ref(storageService, attachmentRef));
       await updateProfile(authService.currentUser, {
         photoURL: attachmentURL || newPhotoURL,
       });
     }
     refreshUser();
   };
+
   return (
     <div>
       <ProfileContainer>
         <h1>My Profile</h1>
         <form>
-          <label htmlFor="profilePhoto">
+          <label htmlFor="profilePhoto" style={{ display: 'inline-block' }}>
             <Avatar
               src={newPhotoURL ? newPhotoURL : userProfile.photoURL}
               sx={{
@@ -117,6 +114,7 @@ function Mypage() {
             />
           </label>
         </form>
+
         <input
           accept="image/*"
           id="profilePhoto"
