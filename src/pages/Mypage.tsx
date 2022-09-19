@@ -4,10 +4,9 @@ import { reduxState } from 'App';
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import { authService, dbService, storageService } from 'fbase';
+import { authService, storageService } from 'fbase';
 import { updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-
 import { useDispatch } from 'react-redux';
 import { userReducer } from 'redux/user';
 import Avatar from '@mui/material/Avatar';
