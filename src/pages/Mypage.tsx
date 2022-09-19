@@ -87,19 +87,17 @@ function Mypage() {
       userProfile.photoURL !== newPhotoURL &&
       authService.currentUser !== null
     ) {
-      const attachmentRef = ref(storageService, `${userProfile.uid}`);
-      console.log(attachmentRef);
+      const attachmentRef: any = ref(storageService, `${userProfile.uid}`);
       await uploadString(attachmentRef, newPhotoURL, 'data_url');
 
-      attachmentURL = await getDownloadURL(
-        ref(storageService, attachmentRef && undefined),
-      );
+      attachmentURL = await getDownloadURL(ref(storageService, attachmentRef));
       await updateProfile(authService.currentUser, {
         photoURL: attachmentURL || newPhotoURL,
       });
     }
     refreshUser();
   };
+
   return (
     <div>
       <ProfileContainer>
