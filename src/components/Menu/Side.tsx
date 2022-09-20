@@ -93,7 +93,7 @@ export default function TemporaryDrawer() {
       </List>
       <Divider />
       <List>
-        {['게시판', '기록', 'Spam'].map((text) => (
+        {['게시판', '기록'].map((text) => (
           <ListItem disablePadding key={text}>
             <ListItemButton onClick={() => goToPage(text)}>
               <ListItemIcon>
