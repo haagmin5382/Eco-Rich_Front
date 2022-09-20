@@ -12,7 +12,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-
+import { addDoc, collection } from 'firebase/firestore';
+import { dbService } from 'fbase';
 const theme = createTheme();
 
 export default function SignUp() {
@@ -45,7 +46,9 @@ export default function SignUp() {
       password === passwordConfirmed
     ) {
       await createUserWithEmailAndPassword(auth, email, password)
-        .then(() => navigate('/login'))
+        .then(() => {
+          navigate('/login');
+        })
         .catch((error) => {
           console.log(error.message);
           if (
