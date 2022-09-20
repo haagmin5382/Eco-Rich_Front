@@ -1,10 +1,8 @@
 import React from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
-
 import Box from '@mui/material/Box';
+import { useNavigate } from 'react-router-dom';
 
 interface postProps {
   id: string;
@@ -15,16 +13,28 @@ interface postProps {
   creatorId: string;
 }
 function PostList({ post }: { post: postProps }) {
+  const navigate = useNavigate();
+  const clickPost = () => {
+    navigate(`/board/${post.id}`);
+  };
+
   return (
     <>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box onClick={clickPost} sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <AccordionSummary aria-controls="panel2bh-content" id="panel2bh-header">
           <Typography
-            sx={{ width: '33%', flexShrink: 0, color: 'text.secondary' }}
+            sx={{
+              width: '33%',
+              flexShrink: 0,
+              color: 'text.secondary',
+              lineHeight: '200%',
+            }}
           >
             {post.writer}
           </Typography>
-          <Typography sx={{ color: 'black' }}>{post.title}</Typography>
+          <Typography sx={{ width: '60%', color: 'black', lineHeight: '200%' }}>
+            {post.title}
+          </Typography>
         </AccordionSummary>
       </Box>
     </>

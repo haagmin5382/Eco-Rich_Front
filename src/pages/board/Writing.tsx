@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { reduxState } from 'App';
 import { addDoc, collection } from 'firebase/firestore';
-import { dbService, storageService } from 'fbase';
+import { dbService } from 'fbase';
 
 const WritingContainer = styled.div`
   margin: 5vw auto;
@@ -31,16 +31,17 @@ function Writing() {
   };
 
   const clickPost = async () => {
-    const nweetContent = {
+    // const randomStr = Math.random().toString(36).substring(2, 12);
+    const writing = {
       writer: userProfile.displayName,
       title: title,
       content: content,
       createdAt: Date.now(),
       creatorId: userProfile.uid, // 로그인할 때  유저정보를 받아온다.
-      // nweet 정보에 attachmentURL을 추가한다. attachmentURL가 없다면 null값을 넣어준다.
+      comment: [],
     };
 
-    await addDoc(collection(dbService, 'board'), nweetContent);
+    await addDoc(collection(dbService, 'board'), writing);
     navigate('/board');
   };
   const clickCancel = () => {
