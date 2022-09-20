@@ -12,6 +12,8 @@ export default function ProgressMobileStepper({
 }) {
   const [activeStep, setActiveStep] = useState(0);
   const pomo = useSelector((state: reduxState) => state.pomo.value.pomoNum);
+  const dayPomo = useSelector((state: reduxState) => state.pomo.value.dayPomo);
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -38,6 +40,10 @@ export default function ProgressMobileStepper({
       }
     }
   }, [rest, minutes]);
+
+  useEffect(() => {
+    setActiveStep(0);
+  }, [dayPomo]);
 
   return (
     <>

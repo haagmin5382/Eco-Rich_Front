@@ -35,11 +35,11 @@ const Timer = () => {
     dispatch(setPomo({ pomoNum: [...pomo, 1], dayPomo: dayPomo }));
     // bgm.play();
   };
-  const increaseDayPomo = async () => {
+  const increaseDayPomo = () => {
     setStart(false);
     setMinutes(25);
     setSeconds(0);
-    await dispatch(
+    dispatch(
       setPomo({
         pomoNum: [],
         dayPomo: [...dayPomo, { Date: today, TotalPomo: pomo.length }],

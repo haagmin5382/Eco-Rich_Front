@@ -13,6 +13,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import ForumIcon from '@mui/icons-material/Forum';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { useSelector, useDispatch } from 'react-redux';
 import { openAndClose } from 'redux/menu';
 import { useNavigate } from 'react-router-dom';
@@ -53,6 +54,9 @@ export default function TemporaryDrawer() {
     if (page === '게시판') {
       navigate('/board');
     }
+    if (page === '기록') {
+      navigate(`/record`);
+    }
   };
   const itemList = userInfo.email
     ? ['로그아웃', '마이페이지']
@@ -89,10 +93,13 @@ export default function TemporaryDrawer() {
       </List>
       <Divider />
       <List>
-        {['게시판', 'Trash', 'Spam'].map((text) => (
+        {['게시판', '기록', 'Spam'].map((text) => (
           <ListItem disablePadding key={text}>
             <ListItemButton onClick={() => goToPage(text)}>
-              <ListItemIcon>{text === '게시판' && <ForumIcon />}</ListItemIcon>
+              <ListItemIcon>
+                {text === '게시판' && <ForumIcon />}
+                {text === '기록' && <ShowChartIcon />}
+              </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
