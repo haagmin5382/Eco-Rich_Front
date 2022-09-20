@@ -106,7 +106,7 @@ function Posted() {
               name="newContent"
               onChange={editContent}
               rows={10}
-              sx={{ width: '75vw' }}
+              sx={{ width: '100%' }}
               variant="filled"
             />
           ) : (
@@ -162,7 +162,7 @@ function Posted() {
       <br />
       <Button
         onClick={clickCommentButton}
-        sx={{ marginLeft: '10vw', width: '80vw' }}
+        sx={{ marginLeft: '10vw', marginBottom: '5vh', width: '80vw' }}
         variant="contained"
       >
         댓글 등록
