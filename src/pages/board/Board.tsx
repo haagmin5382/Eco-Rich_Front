@@ -25,6 +25,7 @@ export default function Board() {
         id: doc.id,
         ...doc.data(),
       }));
+
       setPosts(postArray); // 더 적은 렌더링으로 데이터가 실시간으로 변한다.
     });
   }, []);
