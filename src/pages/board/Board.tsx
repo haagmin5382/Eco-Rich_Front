@@ -43,11 +43,24 @@ export default function Board() {
         >
           <AccordionSummary sx={{ cursor: 'arrow' }}>
             <Typography
-              sx={{ width: '33%', flexShrink: 0, fontWeight: 'bold' }}
+              sx={{
+                width: '33%',
+                flexShrink: 0,
+                fontWeight: 'bold',
+                textAlign: 'center',
+                borderRight: '1px solid #ffffff',
+              }}
             >
               작성자
             </Typography>
-            <Typography sx={{ color: '#ffffff', fontWeight: 'bold' }}>
+            <Typography
+              sx={{
+                width: '60%',
+                color: '#ffffff',
+                textAlign: 'center',
+                fontWeight: 'bold',
+              }}
+            >
               제목
             </Typography>
           </AccordionSummary>

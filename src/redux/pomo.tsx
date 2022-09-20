@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const pomoSlice = createSlice({
   name: 'pomoNum',
   initialState: {
-    value: { pomoNum: [] },
+    value: { pomoNum: [], dayPomo: [] },
   },
   reducers: {
     setPomo: (state, action) => {

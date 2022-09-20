@@ -26,13 +26,21 @@ function PostList({ post }: { post: postProps }) {
             sx={{
               width: '33%',
               flexShrink: 0,
-              color: 'text.secondary',
               lineHeight: '200%',
+              borderRight: '1px solid black',
+              textAlign: 'center',
             }}
           >
             {post.writer}
           </Typography>
-          <Typography sx={{ width: '60%', color: 'black', lineHeight: '200%' }}>
+          <Typography
+            sx={{
+              width: '60%',
+              color: 'black',
+              lineHeight: '200%',
+              textAlign: 'center',
+            }}
+          >
             {post.title}
           </Typography>
         </AccordionSummary>
