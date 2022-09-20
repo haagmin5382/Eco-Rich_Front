@@ -12,7 +12,8 @@ import { userReducer } from 'redux/user';
 import { useDispatch } from 'react-redux';
 import Board from 'pages/board/Board';
 import Writing from 'pages/board/Writing';
-import Posting from 'pages/board/Posted';
+import Posted from 'pages/board/Posted';
+
 function Router() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -39,7 +40,7 @@ function Router() {
           <Route element={<Mypage />} path="/mypage" />
           <Route element={<Board />} path="/board" />
           <Route element={<Writing />} path="/board/writing" />
-          <Route element={<Posting />} path="/board/:id" />
+          <Route element={<Posted />} path="/board/:id" />
         </Routes>
       </BrowserRouter>
     </div>

@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import Router from 'components/Router';
 import { useSelector } from 'react-redux';
 
+interface dayPomoType {
+  Date: string;
+  TotalPomo: number;
+}
 export interface reduxState {
   menu: {
     value: {
@@ -11,6 +15,7 @@ export interface reduxState {
   pomo: {
     value: {
       pomoNum: Array<number>;
+      dayPomo: Array<dayPomoType>;
     };
   };
   user: {
