@@ -46,7 +46,6 @@ export default function TemporaryDrawer() {
         id: doc.id,
         ...doc.data(),
       }));
-      // console.log(pomoArray);
       setPomoInfo(pomoArray); // 더 적은 렌더링으로 데이터가 실시간으로 변한다.
     });
   };
@@ -71,14 +70,13 @@ export default function TemporaryDrawer() {
         const pomos = userPomoObj[0].pomo;
         const isToday = pomos[pomos.length - 1].Date === today;
         const pomoRef = await collection(dbService, 'pomo');
-        // console.log(isToday);
         if (!isToday) {
           // 같은날이 아닐 때
 
           const newPomoData = Object.assign(userPomoObj[0], {
             pomo: [...userPomoObj[0]?.pomo, ...pomoObj?.pomo],
           });
-          console.log('수정');
+
           await setDoc(doc(pomoRef, userPomoObj[0].id), newPomoData);
         }
       }
@@ -115,13 +113,11 @@ export default function TemporaryDrawer() {
     }
     if (page === '기록') {
       await createOrModifyPomoDB();
-      console.log('기록', userPomoObj[0]);
       setIsClickRecord(true);
       // navigate(`/record/${userPomoObj[0]?.id}`);
     }
   };
   // snapShotDB();
-  // console.log('밖', userPomoObj[0]);
   useEffect(() => {
     snapShotDB();
     if (isClickRecord) {

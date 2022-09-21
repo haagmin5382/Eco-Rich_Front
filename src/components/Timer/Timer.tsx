@@ -34,7 +34,6 @@ const Timer = () => {
     dispatch(setPomo({ pomoNum: [...pomo, 1], dayPomo: dayPomo }));
     // bgm.play();
   };
-  // console.log(dayPomo[dayPomo.length - 1]?.Date);
   const increaseDayPomo = () => {
     setStart(false);
     setMinutes(25);
