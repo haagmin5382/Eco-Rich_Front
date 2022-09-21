@@ -1,9 +1,35 @@
 import React from 'react';
-import Header from 'components/Header/Header';
+import Router from 'components/Router';
+
+interface dayPomoType {
+  Date: string;
+  TotalPomo: number;
+}
+export interface reduxState {
+  menu: {
+    value: {
+      sideMenu: boolean;
+    };
+  };
+  pomo: {
+    value: {
+      pomoNum: Array<number>;
+      dayPomo: Array<dayPomoType>;
+    };
+  };
+  user: {
+    value: {
+      displayName: string;
+      email: string;
+      photoURL: string;
+      uid: string;
+    };
+  };
+}
 function App() {
   return (
     <>
-      <Header />
+      <Router />
     </>
   );
 }

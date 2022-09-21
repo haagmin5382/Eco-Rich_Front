@@ -1,43 +1,54 @@
 import React from 'react';
 import styled from 'styled-components';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useDispatch } from 'react-redux';
+import { openAndClose } from 'redux/menu';
 
 const NavContainer = styled.nav`
   display: flex;
+  justify-content: space-between;
   width: 100vw;
-  height: 10vh;
-  line-height: 10vh;
-  background-color: #74c8fd;
-
-  color: #ffffff;
+  height: 8vh;
+  line-height: 8vh;
+  box-shadow: 1px 1px 5px gray;
+  a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 4vh;
+    font-weight: bold;
+    margin-left: 5%;
+  }
 
   ul {
-    width: 100%;
     display: flex;
-    justify-content: space-around;
     margin: 0;
     padding: 0;
+
     li {
       list-style: none;
       font-weight: bold;
       cursor: pointer;
       text-align: center;
-      width: 100%;
-      transition: 0.4s;
-      :hover {
-        color: gray;
-        border-bottom: 5px solid gray;
-      }
+      font-size: 1vw 1vh;
+      padding-top: 1.5vh;
+      margin-right: 2vw;
     }
   }
 `;
 
 function Nav() {
+  const dispatch = useDispatch();
+  const openAndCloseMenu = () => {
+    dispatch(openAndClose({ sideMenu: true }));
+  };
+
   return (
     <NavContainer>
+      <a href="/">Pomodoro</a>
       <ul>
-        <li>Home</li>
-        <li>게시판</li>
-        <li>로그인</li>
+        <li onClick={openAndCloseMenu} onKeyDown={openAndCloseMenu} role="tab">
+          <MenuIcon sx={{ color: 'white', fontSize: 30 }} />
+        </li>
       </ul>
     </NavContainer>
   );
