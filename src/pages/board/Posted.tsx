@@ -16,7 +16,7 @@ function Posted() {
   const { id }: any = useParams();
   const navigate = useNavigate();
   const userProfile = useSelector((state: reduxState) => state.user.value);
-  const [postInfo, setPostInfo] = useState<any>({});
+  const [postInfo, setPostInfo] = useState<any>({ id: '' });
   const [editing, setEditing] = useState(false);
   const [newContent, setNewContent] = useState(postInfo.content);
   const [comment, setComment] = useState({

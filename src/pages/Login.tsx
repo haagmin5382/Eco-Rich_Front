@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import GoogleIcon from '@mui/icons-material/Google';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { authService } from 'fbase';
 import {
@@ -115,7 +116,7 @@ export default function Login() {
 
             <Button
               fullWidth
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 1 }}
               type="submit"
               variant="contained"
             >
@@ -125,10 +126,11 @@ export default function Login() {
               fullWidth
               name="google"
               onClick={socialLogin}
-              sx={{ mt: 1, mb: 2 }}
+              sx={{ mt: 1, mb: 2, background: 'gray' }}
               type="button"
               variant="contained"
             >
+              <GoogleIcon sx={{ marginRight: '1vw' }} />
               Google 로그인
             </Button>
             <Grid container>

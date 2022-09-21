@@ -6,8 +6,6 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { reduxState } from 'App';
 import Stepper from './Stepper';
-import { addDoc, collection } from 'firebase/firestore';
-import { dbService } from 'fbase';
 
 const day = new Date();
 export const today = `${day.getFullYear()}년 ${
@@ -20,8 +18,9 @@ const Timer = () => {
   const [rest, setRest] = useState(false); // 공부하는 타임인지 휴식하는 타임인지 관리하는 state
   const pomo = useSelector((state: reduxState) => state.pomo.value.pomoNum);
   const dayPomo = useSelector((state: reduxState) => state.pomo.value.dayPomo);
-  const userProfile = useSelector((state: reduxState) => state.user.value);
+  // const userProfile = useSelector((state: reduxState) => state.user.value);
   const dispatch = useDispatch();
+  // const userInfo = useSelector((state: reduxState) => state.user.value);
 
   const startTimer = () => {
     setStart(true);
@@ -35,28 +34,36 @@ const Timer = () => {
     dispatch(setPomo({ pomoNum: [...pomo, 1], dayPomo: dayPomo }));
     // bgm.play();
   };
+  // console.log(dayPomo[dayPomo.length - 1]?.Date);
   const increaseDayPomo = () => {
     setStart(false);
     setMinutes(25);
     setSeconds(0);
-    dispatch(
-      setPomo({
-        pomoNum: [],
-        dayPomo: [...dayPomo, { Date: today, TotalPomo: pomo.length }],
-      }),
-    );
-  };
-  useEffect(() => {
-    if (dayPomo[dayPomo.length - 1]?.TotalPomo) {
-      const PomoInfo = {
-        userName: userProfile.displayName,
-        dayPomo: dayPomo,
-        createdAt: Date.now(),
-        creatorId: userProfile.uid, // 로그인할 때  유저정보를 받아온다.
-      };
-      addDoc(collection(dbService, 'pomo'), PomoInfo);
+    if (dayPomo[dayPomo.length - 1]?.Date !== today) {
+      dispatch(
+        setPomo({
+          pomoNum: [],
+          dayPomo: [...dayPomo, { Date: today, TotalPomo: pomo.length }],
+        }),
+      );
+    } else {
+      const todayPomo = dayPomo.filter((obj) => obj.Date === today);
+      const notTodayPomo = dayPomo.filter((obj) => obj.Date !== today);
+      dispatch(
+        setPomo({
+          pomoNum: [],
+          dayPomo: [
+            ...notTodayPomo,
+            {
+              Date: todayPomo[0]?.Date,
+              TotalPomo: todayPomo[0]?.TotalPomo + pomo.length,
+            },
+          ],
+        }),
+      );
     }
-  }, [dayPomo[dayPomo.length - 1]?.TotalPomo]);
+  };
+
   useEffect(() => {
     const countdown = setInterval(() => {
       if (start) {
@@ -135,7 +142,11 @@ const Timer = () => {
         ) : (
           <Button
             onClick={startTimer}
-            sx={{ background: 'tomato', marginRight: '1vw' }}
+            sx={{
+              background: 'tomato',
+              marginRight: '1vw',
+              fontWeight: 'bold',
+            }}
             variant="contained"
           >
             타이머 시작
@@ -144,10 +155,10 @@ const Timer = () => {
 
         <Button
           onClick={increaseDayPomo}
-          sx={{ background: 'black' }}
+          sx={{ background: '#2DAB01', marginRight: '1vw', fontWeight: 'bold' }}
           variant="contained"
         >
-          오늘 공부 마치기
+          공부 마치기
         </Button>
       </CardContent>
     </main>

@@ -21,7 +21,6 @@ export default function Board() {
   const [posts, setPosts] = useState<Array<any>>([{ id: '' }]);
   useEffect(() => {
     onSnapshot(collection(dbService, 'board'), (snapShot) => {
-      console.log(snapShot.docs[0]);
       const postArray = snapShot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),

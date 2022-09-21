@@ -9,7 +9,10 @@ import { updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useDispatch } from 'react-redux';
 import { userReducer } from 'redux/user';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
+import { getAuth, deleteUser } from 'firebase/auth';
+// import AlertModal from 'components/Modal/AlertModal';
 
 const ProfileContainer = styled.div`
   width: 30vw;
@@ -35,7 +38,11 @@ const ProfileContainer = styled.div`
 
 function Mypage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const auth = getAuth();
+  const user = auth.currentUser;
   const userProfile = useSelector((state: reduxState) => state.user.value);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [newDisplayName, setNewDisplayName] = useState(userProfile.displayName);
   const [newPhotoURL, setNewPhotoURL] = useState(userProfile.photoURL);
   const changeDisplayName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +53,6 @@ function Mypage() {
   };
   const refreshUser = () => {
     // 회원정보 수정했을 때 유저정보 업데이트
-    const user = authService.currentUser;
 
     dispatch(
       userReducer({
@@ -96,6 +102,13 @@ function Mypage() {
     }
     refreshUser();
   };
+  const withdraw = async () => {
+    if (user) {
+      await deleteUser(user);
+      navigate('/');
+    }
+    // setIsModalOpen(true);
+  };
 
   return (
     <div>
@@ -142,7 +155,22 @@ function Mypage() {
         >
           회원정보 수정
         </Button>
+        <Button
+          fullWidth
+          onClick={withdraw}
+          sx={{
+            mt: 1,
+            mb: 2,
+            fontSize: 'large',
+            backgroundColor: '#F53829',
+            ':hover': { backgroundColor: '#EAA8A3' },
+          }}
+          variant="contained"
+        >
+          회원 탈퇴
+        </Button>
       </ProfileContainer>
+      {/* {isModalOpen ? <AlertModal /> : null} */}
     </div>
   );
 }
