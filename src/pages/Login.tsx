@@ -42,17 +42,17 @@ export default function Login() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!email) {
-      console.log('이메일을 입력하세요');
+      alert('이메일을 입력하세요');
     } else if (!password) {
-      console.log('비밀번호를 입력하세요');
+      alert('비밀번호를 입력하세요');
     } else {
       await signInWithEmailAndPassword(auth, email, password)
         .then(() => navigate('/'))
         .catch((error) => {
           if (error.message === 'Firebase: Error (auth/user-not-found).') {
-            console.log('아이디가 없습니다.');
+            alert('아이디가 없습니다.');
           } else {
-            console.log('비밀번호가 다릅니다.');
+            alert('비밀번호가 다릅니다.');
           }
         });
     }
@@ -60,7 +60,7 @@ export default function Login() {
   const socialLogin = async (e: React.MouseEvent<HTMLElement>) => {
     let provider;
     const evnetTarget = e.target as HTMLButtonElement;
-    console.log(evnetTarget.name);
+    alert(evnetTarget.name);
     if (evnetTarget.name === 'google') {
       provider = new GoogleAuthProvider();
       await signInWithPopup(authService, provider);
