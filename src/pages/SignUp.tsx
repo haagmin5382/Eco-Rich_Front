@@ -49,23 +49,23 @@ export default function SignUp() {
           navigate('/login');
         })
         .catch((error) => {
-          console.log(error.message);
+          alert(error.message);
           if (
             error.message === 'Firebase: Error (auth/email-already-in-use).'
           ) {
-            console.log('이미 존재하는 메일입니다.');
+            alert('이미 존재하는 메일입니다.');
           }
           if (
             error.message ===
             'Firebase: Password should be at least 6 characters (auth/weak-password).'
           ) {
-            console.log('비밀번호는 최소 6자리 이상이어야 합니다.');
+            alert('비밀번호는 최소 6자리 이상이어야 합니다.');
           }
         });
     } else if (password !== passwordConfirmed) {
-      console.log('비밀번호가 다릅니다.');
+      alert('비밀번호가 다릅니다.');
     } else {
-      console.log('모든값은 필수 입니다.');
+      alert('모든값은 필수 입니다.');
     }
   };
 
