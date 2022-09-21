@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import {
   Chart as ChartJS,
@@ -24,6 +24,7 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
+
 function Record() {
   // const dayPomo = useSelector((state: reduxState) => state.pomo.value.dayPomo);
   // const totalPomo = dayPomo.slice(

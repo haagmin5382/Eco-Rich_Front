@@ -14,11 +14,20 @@ import Avatar from '@mui/material/Avatar';
 import { getAuth, deleteUser } from 'firebase/auth';
 // import AlertModal from 'components/Modal/AlertModal';
 
+const MypageBackground = styled.img`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+`;
+
 const ProfileContainer = styled.div`
   width: 30vw;
   margin: 0 auto;
   text-align: center;
+
   h1 {
+    margin-top: 0vh;
     font-size: 5vw;
   }
   @media screen and (max-width: 500px) {
@@ -112,6 +121,13 @@ function Mypage() {
 
   return (
     <div>
+      <MypageBackground
+        alt="mypageImg"
+        src={
+          process.env.PUBLIC_URL +
+          `./Images/samantha-gades-BlIhVfXbi9s-unsplash.jpg`
+        }
+      />
       <ProfileContainer>
         <h1>My Profile</h1>
         <form>
@@ -144,7 +160,11 @@ function Mypage() {
           name="displayName"
           onChange={changeDisplayName}
           required
-          sx={{ fontSize: 'small' }}
+          sx={{
+            fontSize: 'small',
+            backgroundColor: '#ffffff',
+            borderRadius: '10px',
+          }}
         />
 
         <Button
