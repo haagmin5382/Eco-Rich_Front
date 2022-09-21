@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/EcoAndRich_Front/static/css/main.e6c13ad2.css",
+    "main.js": "/EcoAndRich_Front/static/js/main.84982565.js",
+    "index.html": "/EcoAndRich_Front/index.html",
+    "main.e6c13ad2.css.map": "/EcoAndRich_Front/static/css/main.e6c13ad2.css.map",
+    "main.84982565.js.map": "/EcoAndRich_Front/static/js/main.84982565.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.84982565.js"
+  ]
+}
