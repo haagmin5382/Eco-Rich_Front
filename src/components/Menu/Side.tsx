@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -13,11 +13,22 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import ForumIcon from '@mui/icons-material/Forum';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { useSelector, useDispatch } from 'react-redux';
 import { openAndClose } from 'redux/menu';
 import { useNavigate } from 'react-router-dom';
+import { persistor } from '../../index';
 import { authService } from 'fbase';
 import { reduxState } from 'App';
+import {
+  addDoc,
+  setDoc,
+  doc,
+  collection,
+  onSnapshot,
+} from 'firebase/firestore';
+import { dbService } from 'fbase';
+import { today } from 'components/Timer/Timer';
 
 export default function TemporaryDrawer() {
   const dispatch = useDispatch();
@@ -26,6 +37,53 @@ export default function TemporaryDrawer() {
     (state: reduxState) => state.menu.value.sideMenu,
   );
   const userInfo = useSelector((state: reduxState) => state.user.value);
+  const dayPomo = useSelector((state: reduxState) => state.pomo.value.dayPomo);
+  const [isClickRecord, setIsClickRecord] = useState(false);
+  const [pomoInfo, setPomoInfo] = useState<Array<any>>([]);
+  const snapShotDB = async () => {
+    await onSnapshot(collection(dbService, 'pomo'), (snapShot) => {
+      const pomoArray = snapShot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      // console.log(pomoArray);
+      setPomoInfo(pomoArray); // 더 적은 렌더링으로 데이터가 실시간으로 변한다.
+    });
+  };
+
+  const userPomoObj = pomoInfo.filter((obj) => obj.creatorId === userInfo.uid);
+  const pomoObj = {
+    userName: userInfo.displayName,
+    pomo: dayPomo,
+    createdAt: Date.now(),
+    creatorId: userInfo.uid, // 로그인할 때  유저정보를 받아온다.
+  };
+
+  const createOrModifyPomoDB = async () => {
+    if (
+      dayPomo[dayPomo.length - 1]?.TotalPomo > 0 &&
+      !userPomoObj[0] &&
+      userInfo.displayName
+    ) {
+      await addDoc(collection(dbService, 'pomo'), pomoObj);
+    } else {
+      if (userPomoObj[0]) {
+        const pomos = userPomoObj[0].pomo;
+        const isToday = pomos[pomos.length - 1].Date === today;
+        const pomoRef = await collection(dbService, 'pomo');
+        // console.log(isToday);
+        if (!isToday) {
+          // 같은날이 아닐 때
+
+          const newPomoData = Object.assign(userPomoObj[0], {
+            pomo: [...userPomoObj[0]?.pomo, ...pomoObj?.pomo],
+          });
+          console.log('수정');
+          await setDoc(doc(pomoRef, userPomoObj[0].id), newPomoData);
+        }
+      }
+    }
+  };
 
   const toggleDrawer = (event: any) => {
     if (
@@ -36,7 +94,7 @@ export default function TemporaryDrawer() {
     }
     dispatch(openAndClose({ sideMenu: false }));
   };
-  const goToPage = (page: string) => {
+  const goToPage = async (page: string) => {
     if (page === '로그인') {
       navigate('/login');
     }
@@ -45,6 +103,8 @@ export default function TemporaryDrawer() {
     }
     if (page === '로그아웃') {
       authService.signOut();
+      persistor.pause();
+      persistor.flush().then(() => persistor.purge()); // localstorage 비우기
       navigate('/');
     }
     if (page === '마이페이지') {
@@ -53,7 +113,22 @@ export default function TemporaryDrawer() {
     if (page === '게시판') {
       navigate('/board');
     }
+    if (page === '기록') {
+      await createOrModifyPomoDB();
+      console.log('기록', userPomoObj[0]);
+      setIsClickRecord(true);
+      // navigate(`/record/${userPomoObj[0]?.id}`);
+    }
   };
+  // snapShotDB();
+  // console.log('밖', userPomoObj[0]);
+  useEffect(() => {
+    snapShotDB();
+    if (isClickRecord) {
+      navigate(`/record/${userPomoObj[0]?.id}`);
+      setIsClickRecord(false);
+    }
+  }, [isClickRecord]);
   const itemList = userInfo.email
     ? ['로그아웃', '마이페이지']
     : ['로그인', '회원가입'];
@@ -89,10 +164,13 @@ export default function TemporaryDrawer() {
       </List>
       <Divider />
       <List>
-        {['게시판', 'Trash', 'Spam'].map((text) => (
+        {['게시판', '기록'].map((text) => (
           <ListItem disablePadding key={text}>
             <ListItemButton onClick={() => goToPage(text)}>
-              <ListItemIcon>{text === '게시판' && <ForumIcon />}</ListItemIcon>
+              <ListItemIcon>
+                {text === '게시판' && <ForumIcon />}
+                {text === '기록' && <ShowChartIcon />}
+              </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>

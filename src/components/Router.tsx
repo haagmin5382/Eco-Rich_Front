@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import Board from 'pages/board/Board';
 import Writing from 'pages/board/Writing';
 import Posted from 'pages/board/Posted';
+import Record from 'pages/Record';
 
 function Router() {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ function Router() {
           <Route element={<Board />} path="/board" />
           <Route element={<Writing />} path="/board/writing" />
           <Route element={<Posted />} path="/board/:id" />
+          <Route element={<Record />} path="/record/:id" />
         </Routes>
       </BrowserRouter>
     </div>

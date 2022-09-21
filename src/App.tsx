@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Router from 'components/Router';
-import { useSelector } from 'react-redux';
 
 interface dayPomoType {
   Date: string;
