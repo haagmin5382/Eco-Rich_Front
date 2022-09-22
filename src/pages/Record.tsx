@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import {
   Chart as ChartJS,
@@ -14,6 +13,8 @@ import {
 import { Line } from 'react-chartjs-2';
 import { getDoc, doc, collection } from 'firebase/firestore';
 import { dbService } from 'fbase';
+import { useSelector } from 'react-redux';
+import { reduxState } from 'App';
 
 ChartJS.register(
   CategoryScale,
@@ -40,6 +41,12 @@ function Record() {
     const recordedData = await getDoc(doc(pomoRef, id));
     setRecordedPomo(recordedData.data());
   };
+
+  const userProfile = useSelector((state: reduxState) => state.user.value);
+  if (!userProfile.uid) {
+    // window.location.href = '/login';
+  }
+  console.log(userProfile);
   useEffect(() => {
     getRecorderData();
   }, []);

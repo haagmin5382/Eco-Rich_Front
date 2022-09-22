@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import PostList from 'components/Board/PostList';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
+import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { dbService } from 'fbase';
 import { collection, onSnapshot } from 'firebase/firestore';
@@ -19,6 +20,8 @@ const BoardContainer = styled.div`
 export default function Board() {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<Array<any>>([{ id: '' }]);
+  const auth = getAuth();
+  const user = auth.currentUser;
   useEffect(() => {
     onSnapshot(collection(dbService, 'board'), (snapShot) => {
       const postArray = snapShot.docs.map((doc) => ({
@@ -29,6 +32,14 @@ export default function Board() {
       setPosts(postArray); // 더 적은 렌더링으로 데이터가 실시간으로 변한다.
     });
   }, []);
+
+  const writePosting = () => {
+    if (user) {
+      navigate('/board/writing');
+    } else {
+      navigate('/login');
+    }
+  };
   return (
     <main>
       <BoardContainer>
@@ -70,7 +81,7 @@ export default function Board() {
         ))}
       </BoardContainer>
       <Button
-        onClick={() => navigate('/board/writing')}
+        onClick={writePosting}
         sx={{
           marginLeft: '10vw',
           color: '#ffffff',

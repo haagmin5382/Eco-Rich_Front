@@ -50,6 +50,7 @@ function Mypage() {
   const navigate = useNavigate();
   const auth = getAuth();
   const user = auth.currentUser;
+
   const userProfile = useSelector((state: reduxState) => state.user.value);
   // const [isModalOpen, setIsModalOpen] = useState(false);
   const [newDisplayName, setNewDisplayName] = useState(userProfile.displayName);
@@ -60,9 +61,11 @@ function Mypage() {
     } = e;
     setNewDisplayName(value);
   };
+  if (!userProfile.uid) {
+    window.location.href = '/login';
+  }
   const refreshUser = () => {
     // 회원정보 수정했을 때 유저정보 업데이트
-
     dispatch(
       userReducer({
         email: user?.email,
