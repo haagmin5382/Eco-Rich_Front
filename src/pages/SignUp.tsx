@@ -12,6 +12,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { reduxState } from 'App';
 
 const theme = createTheme();
 
@@ -21,7 +23,11 @@ export default function SignUp() {
   const [passwordConfirmed, setPasswordConfirmed] = useState('');
   const auth = getAuth();
   const navigate = useNavigate();
+  const userInfo = useSelector((state: reduxState) => state.user.value);
 
+  if (userInfo.uid) {
+    window.location.href = '/';
+  }
   const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
@@ -37,7 +43,6 @@ export default function SignUp() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     if (
       email &&
       password &&

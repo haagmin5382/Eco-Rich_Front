@@ -18,6 +18,9 @@ function Writing() {
   const userProfile = useSelector((state: reduxState) => state.user.value);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  if (!userProfile.uid) {
+    window.location.href = '/login';
+  }
   const inputWriting = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { name, value },

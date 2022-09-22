@@ -19,6 +19,8 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { reduxState } from 'App';
 
 const theme = createTheme();
 
@@ -26,8 +28,11 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const auth = getAuth();
+  const userProfile = useSelector((state: reduxState) => state.user.value);
   const navigate = useNavigate();
-
+  if (userProfile.uid) {
+    window.location.href = '/';
+  }
   const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
@@ -60,7 +65,7 @@ export default function Login() {
   const socialLogin = async (e: React.MouseEvent<HTMLElement>) => {
     let provider;
     const evnetTarget = e.target as HTMLButtonElement;
-    alert(evnetTarget.name);
+
     if (evnetTarget.name === 'google') {
       provider = new GoogleAuthProvider();
       await signInWithPopup(authService, provider);
