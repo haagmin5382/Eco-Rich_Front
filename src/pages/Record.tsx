@@ -15,6 +15,8 @@ import { getDoc, doc, collection } from 'firebase/firestore';
 import { dbService } from 'fbase';
 import { useSelector } from 'react-redux';
 import { reduxState } from 'App';
+import PageError from './pageForError/PageForNotLogin';
+import PageForNotRecording from './pageForError/PageForNotRecording';
 
 ChartJS.register(
   CategoryScale,
@@ -35,6 +37,7 @@ function Record() {
 
   const [recordedPomo, setRecordedPomo] = useState<any>();
   const { id } = useParams();
+
   const pomoRef = collection(dbService, 'pomo');
 
   const getRecorderData = async () => {
@@ -43,10 +46,7 @@ function Record() {
   };
 
   const userProfile = useSelector((state: reduxState) => state.user.value);
-  if (!userProfile.uid) {
-    // window.location.href = '/login';
-  }
-  console.log(userProfile);
+
   useEffect(() => {
     getRecorderData();
   }, []);
@@ -65,7 +65,15 @@ function Record() {
   };
   return (
     <div>
-      <Line data={data} />
+      {userProfile.uid ? (
+        id !== 'undefined' ? (
+          <Line data={data} />
+        ) : (
+          <PageForNotRecording />
+        )
+      ) : (
+        <PageError />
+      )}
     </div>
   );
 }
