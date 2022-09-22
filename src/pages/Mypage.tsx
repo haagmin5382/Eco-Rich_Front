@@ -12,6 +12,7 @@ import { userReducer } from 'redux/user';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import { getAuth, deleteUser } from 'firebase/auth';
+import PageError from './pageForError/PageForNotLogin';
 // import AlertModal from 'components/Modal/AlertModal';
 
 const MypageBackground = styled.img`
@@ -61,9 +62,7 @@ function Mypage() {
     } = e;
     setNewDisplayName(value);
   };
-  if (!userProfile.uid) {
-    window.location.href = '/login';
-  }
+
   const refreshUser = () => {
     // 회원정보 수정했을 때 유저정보 업데이트
     dispatch(
@@ -123,78 +122,83 @@ function Mypage() {
   };
 
   return (
-    <div>
-      <MypageBackground
-        alt="mypageImg"
-        src={
-          process.env.PUBLIC_URL +
-          `./Images/samantha-gades-BlIhVfXbi9s-unsplash.jpg`
-        }
-      />
-      <ProfileContainer>
-        <h1>My Profile</h1>
-        <form>
-          <label htmlFor="profilePhoto" style={{ display: 'inline-block' }}>
-            <Avatar
-              src={newPhotoURL ? newPhotoURL : userProfile.photoURL}
+    <>
+      {userProfile.uid ? (
+        <>
+          <MypageBackground
+            alt="mypageImg"
+            src={
+              process.env.PUBLIC_URL +
+              `./Images/samantha-gades-BlIhVfXbi9s-unsplash.jpg`
+            }
+          />
+          <ProfileContainer>
+            <h1>My Profile</h1>
+            <form>
+              <label htmlFor="profilePhoto" style={{ display: 'inline-block' }}>
+                <Avatar
+                  src={newPhotoURL ? newPhotoURL : userProfile.photoURL}
+                  sx={{
+                    margin: '0 auto',
+                    width: '200px',
+                    height: '200px',
+                    cursor: 'pointer',
+                  }}
+                />
+              </label>
+            </form>
+
+            <input
+              accept="image/*"
+              id="profilePhoto"
+              onChange={changeProfilePhoto}
+              style={{ display: 'none' }}
+              type="file"
+            />
+            <TextField
+              autoComplete="displayName"
+              fullWidth
+              id="displayName"
+              label={userProfile.displayName}
+              margin="normal"
+              name="displayName"
+              onChange={changeDisplayName}
+              required
               sx={{
-                margin: '0 auto',
-                width: '200px',
-                height: '200px',
-                cursor: 'pointer',
+                fontSize: 'small',
+                backgroundColor: '#ffffff',
+                borderRadius: '10px',
               }}
             />
-          </label>
-        </form>
 
-        <input
-          accept="image/*"
-          id="profilePhoto"
-          onChange={changeProfilePhoto}
-          style={{ display: 'none' }}
-          type="file"
-        />
-        <TextField
-          autoComplete="displayName"
-          fullWidth
-          id="displayName"
-          label={userProfile.displayName}
-          margin="normal"
-          name="displayName"
-          onChange={changeDisplayName}
-          required
-          sx={{
-            fontSize: 'small',
-            backgroundColor: '#ffffff',
-            borderRadius: '10px',
-          }}
-        />
-
-        <Button
-          fullWidth
-          onClick={editProfile}
-          sx={{ mt: 3, mb: 2, fontSize: 'large' }}
-          variant="contained"
-        >
-          회원정보 수정
-        </Button>
-        <Button
-          fullWidth
-          onClick={withdraw}
-          sx={{
-            mt: 1,
-            mb: 2,
-            fontSize: 'large',
-            backgroundColor: '#F53829',
-            ':hover': { backgroundColor: '#EAA8A3' },
-          }}
-          variant="contained"
-        >
-          회원 탈퇴
-        </Button>
-      </ProfileContainer>
-      {/* {isModalOpen ? <AlertModal /> : null} */}
-    </div>
+            <Button
+              fullWidth
+              onClick={editProfile}
+              sx={{ mt: 3, mb: 2, fontSize: 'large' }}
+              variant="contained"
+            >
+              회원정보 수정
+            </Button>
+            <Button
+              fullWidth
+              onClick={withdraw}
+              sx={{
+                mt: 1,
+                mb: 2,
+                fontSize: 'large',
+                backgroundColor: '#F53829',
+                ':hover': { backgroundColor: '#EAA8A3' },
+              }}
+              variant="contained"
+            >
+              회원 탈퇴
+            </Button>
+          </ProfileContainer>{' '}
+        </>
+      ) : (
+        <PageError />
+      )}
+    </>
   );
 }
 

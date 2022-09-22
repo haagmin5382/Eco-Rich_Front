@@ -26,7 +26,7 @@ export default function SignUp() {
   const userInfo = useSelector((state: reduxState) => state.user.value);
 
   if (userInfo.uid) {
-    window.location.href = '/';
+    window.location.href = '/'; // 로그인 한 유저가 이 페이지에 들어오면 홈으로 보낸다.
   }
   const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
