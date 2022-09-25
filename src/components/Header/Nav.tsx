@@ -7,7 +7,7 @@ import { openAndClose } from 'redux/menu';
 const NavContainer = styled.nav`
   display: flex;
   justify-content: space-between;
-  width: 100vw;
+  /* width: 100vw; */
   height: 8vh;
   line-height: 8vh;
   box-shadow: 1px 1px 5px gray;
