@@ -30,7 +30,7 @@ function Home() {
           margin: '0vw auto',
           // justifyContent: 'center',
           textAlign: 'center',
-          width: '70vw',
+          width: '80vw',
           height: '50vh',
           // border: '1px solid tomato',
         }}
