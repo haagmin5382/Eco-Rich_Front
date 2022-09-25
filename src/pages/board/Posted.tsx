@@ -48,7 +48,7 @@ function Posted() {
       ...postInfo,
       comment: [...postInfo.comment, comment],
     });
-    location.reload();
+    window.location.reload();
   };
   const clickDelete = async () => {
     await deleteDoc(doc(boardRef, id));
