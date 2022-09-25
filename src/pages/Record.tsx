@@ -50,12 +50,13 @@ function Record() {
   useEffect(() => {
     getRecorderData();
   }, []);
+  console.log(userProfile);
   const data = {
     labels: recordedPomo?.pomo.map((obj: any) => obj.Date), // optional (y축의 index)
     datasets: [
       {
         label: `${
-          recordedPomo?.userName ? recordedPomo?.userName : '익명'
+          userProfile.displayName ? userProfile.displayName : '익명'
         }님의 뽀모 갯수`,
         data: recordedPomo?.pomo.map((obj: any) => obj.TotalPomo),
         borderColor: 'tomato',
