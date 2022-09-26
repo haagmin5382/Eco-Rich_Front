@@ -31,6 +31,17 @@ import { dbService } from 'fbase';
 import { today } from 'components/Timer/Timer';
 
 export default function TemporaryDrawer() {
+  interface pomoTypeInPomoInfo {
+    TotalPomo: number;
+    Date: string;
+  }
+  interface pomoInfoType {
+    id: string;
+    createdAt: number;
+    creatorId: string;
+    pomo: Array<pomoTypeInPomoInfo>;
+    userName: string;
+  }
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const sideMenu = useSelector(
@@ -39,17 +50,16 @@ export default function TemporaryDrawer() {
   const userInfo = useSelector((state: reduxState) => state.user.value);
   const dayPomo = useSelector((state: reduxState) => state.pomo.value.dayPomo);
   const [isClickRecord, setIsClickRecord] = useState(false);
-  const [pomoInfo, setPomoInfo] = useState<Array<any>>([]);
+  const [pomoInfo, setPomoInfo] = useState<Array<pomoInfoType>>([]);
   const snapShotDB = async () => {
     await onSnapshot(collection(dbService, 'pomo'), (snapShot) => {
       const pomoArray = snapShot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setPomoInfo(pomoArray); // 더 적은 렌더링으로 데이터가 실시간으로 변한다.
+      setPomoInfo(pomoArray as Array<pomoInfoType>); // 더 적은 렌더링으로 데이터가 실시간으로 변한다.
     });
   };
-
   const userPomoObj = pomoInfo.filter((obj) => obj.creatorId === userInfo.uid);
   const pomoObj = {
     userName: userInfo.displayName,
