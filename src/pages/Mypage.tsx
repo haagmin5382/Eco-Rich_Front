@@ -75,12 +75,16 @@ function Mypage() {
     );
   };
 
-  const changeProfilePhoto = (e: any) => {
+  const changeProfilePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { files },
     } = e;
     // const { files } = eventTarget;
-    const theFile = files[0];
+
+    let theFile;
+    if (files) {
+      theFile = files[0];
+    }
 
     const reader = new FileReader();
     reader.onloadend = (finishedEvent: any) => {
@@ -89,7 +93,9 @@ function Mypage() {
       } = finishedEvent;
       setNewPhotoURL(result); // 미리보기 이미지 설정
     }; // 파일 읽기가 끝난 후 finishedEvent를 받는다.
-    reader.readAsDataURL(theFile); // readAsDataURL을 사용해서 파일을 읽는다. (파일을 읽기 시작한다)
+    if (theFile) {
+      reader.readAsDataURL(theFile); // readAsDataURL을 사용해서 파일을 읽는다. (파일을 읽기 시작한다)
+    }
     e.target.value = '';
   };
   const editProfile = async () => {

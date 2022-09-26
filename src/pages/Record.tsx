@@ -34,15 +34,34 @@ function Record() {
   //   dayPomo.length >= 5 ? dayPomo.length - 5 : 0,
   //   dayPomo.length,
   // );
+  interface pomoArrayType {
+    Date: string;
+    TotalPomo: number;
+  }
+  interface recordedPomoType {
+    createdAt: number;
+    creatorId: string;
+    pomo: Array<pomoArrayType>;
+    userName: string;
+  }
 
-  const [recordedPomo, setRecordedPomo] = useState<any>();
+  const [recordedPomo, setRecordedPomo] = useState<
+    recordedPomoType | undefined
+  >({
+    createdAt: 0,
+    creatorId: '',
+    pomo: [{ Date: '', TotalPomo: 0 }],
+    userName: '',
+  });
+
   const { id } = useParams();
 
   const pomoRef = collection(dbService, 'pomo');
 
   const getRecorderData = async () => {
     const recordedData = await getDoc(doc(pomoRef, id));
-    setRecordedPomo(recordedData.data());
+    const recoredeDataInfo = recordedData.data();
+    setRecordedPomo(recoredeDataInfo as recordedPomoType);
   };
 
   const userProfile = useSelector((state: reduxState) => state.user.value);
@@ -50,15 +69,15 @@ function Record() {
   useEffect(() => {
     getRecorderData();
   }, []);
-  console.log(userProfile);
+
   const data = {
-    labels: recordedPomo?.pomo.map((obj: any) => obj.Date), // optional (y축의 index)
+    labels: recordedPomo?.pomo.map((obj: pomoArrayType) => obj.Date), // optional (y축의 index)
     datasets: [
       {
         label: `${
           userProfile.displayName ? userProfile.displayName : '익명'
         }님의 뽀모 갯수`,
-        data: recordedPomo?.pomo.map((obj: any) => obj.TotalPomo),
+        data: recordedPomo?.pomo.map((obj: pomoArrayType) => obj.TotalPomo),
         borderColor: 'tomato',
         backgroundColor: 'tomato',
       },

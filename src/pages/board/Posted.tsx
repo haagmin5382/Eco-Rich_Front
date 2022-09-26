@@ -12,11 +12,30 @@ import { reduxState } from 'App';
 import Comment from 'components/Board/Comment';
 import CommentIcon from '@mui/icons-material/Comment';
 import { useNavigate } from 'react-router-dom';
+export interface commentType {
+  writer: string;
+  comment: string;
+}
+export interface postInfoType {
+  comment: Array<commentType>;
+  content: string;
+  createdAt: number;
+  creatorId: string;
+  title: string;
+  writer: string;
+}
 function Posted() {
-  const { id }: any = useParams();
+  const id = useParams().id;
   const navigate = useNavigate();
   const userProfile = useSelector((state: reduxState) => state.user.value);
-  const [postInfo, setPostInfo] = useState<any>({ id: '' });
+  const [postInfo, setPostInfo] = useState<postInfoType>({
+    comment: [],
+    content: '',
+    createdAt: 0,
+    creatorId: '',
+    title: '',
+    writer: '',
+  });
   const [editing, setEditing] = useState(false);
   const [newContent, setNewContent] = useState(postInfo.content);
   const [comment, setComment] = useState({
@@ -27,7 +46,7 @@ function Posted() {
   const boardRef = collection(dbService, 'board');
   const getPostData = async () => {
     const postData = await getDoc(doc(boardRef, id));
-    setPostInfo(postData.data());
+    setPostInfo(postData.data() as postInfoType);
   };
 
   const inputComment = (e: React.ChangeEvent<HTMLInputElement>) => {
