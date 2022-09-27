@@ -100,6 +100,7 @@ export default function TemporaryDrawer() {
     ) {
       return;
     }
+
     dispatch(openAndClose({ sideMenu: false }));
   };
   const goToPage = async (page: string) => {

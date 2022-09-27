@@ -82,7 +82,7 @@ const Timer = () => {
               setRest(false); // 휴식이 끝나면 공부하는 타이머가 되게끔 rest를 false로 바꿔주고
               setMinutes(25); // 공부하는 타이머가 되게끔 분을 25분으로 설정한다.
               increasePomo(); // 휴식이 끝나면 뽀모 갯수 증가한다. (1세트 = 1뽀모)
-              clearInterval(countdown); // setInterval로 반복하고 countdown 함수를 멈추게 한다.
+              // clearInterval(countdown); // setInterval로 반복하고 countdown 함수를 멈추게 한다.
             }
           }
           if (seconds > 0) {
@@ -106,7 +106,7 @@ const Timer = () => {
               } else {
                 setMinutes(5); // 4세트때가 아닌 경우에는 5분의 휴식 타이머로 바뀐다.
               }
-              clearInterval(countdown);
+              // clearInterval(countdown);
             }
           }
           if (seconds > 0) {
@@ -116,8 +116,9 @@ const Timer = () => {
         }
       }
     }, 1000);
+
     return () => {
-      clearInterval(countdown);
+      clearInterval(countdown); // 언마운트 , 컴포넌트가 사라질 때 return 안의 함수가 실행된다.
     };
   }, [start, minutes, seconds, rest]);
 

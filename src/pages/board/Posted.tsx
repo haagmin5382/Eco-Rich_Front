@@ -63,11 +63,15 @@ function Posted() {
   };
 
   const clickCommentButton = async () => {
-    await setDoc(doc(boardRef, id), {
-      ...postInfo,
-      comment: [...postInfo.comment, comment],
-    });
-    window.location.reload();
+    if (userProfile.uid) {
+      setComment({ writer: userProfile.displayName, comment: '' });
+      await setDoc(doc(boardRef, id), {
+        ...postInfo,
+        comment: [...postInfo.comment, comment],
+      });
+    } else {
+      navigate(`/login`);
+    }
   };
   const clickDelete = async () => {
     await deleteDoc(doc(boardRef, id));
@@ -175,6 +179,7 @@ function Posted() {
         onChange={inputComment}
         rows={4}
         sx={{ marginLeft: '10vw', textAlign: 'center', width: '80vw' }}
+        value={comment.comment}
         variant="filled"
       />
       <br />
