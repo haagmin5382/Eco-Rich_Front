@@ -69,6 +69,7 @@ function Posted() {
         ...postInfo,
         comment: [...postInfo.comment, comment],
       });
+      setPostInfo({ ...postInfo, comment: [...postInfo.comment, comment] });
     } else {
       navigate(`/login`);
     }
