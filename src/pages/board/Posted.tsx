@@ -86,7 +86,7 @@ function Posted() {
         ...postInfo,
         content: newContent,
       });
-      location.reload();
+      navigate('/board');
     }
   };
   const cancelEdit = () => {

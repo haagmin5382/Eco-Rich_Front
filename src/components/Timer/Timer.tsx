@@ -118,7 +118,10 @@ const Timer = () => {
     }, 1000);
 
     return () => {
-      clearInterval(countdown); // 언마운트 , 컴포넌트가 사라질 때 return 안의 함수가 실행된다.
+      // console.log('clear Interval');
+      clearInterval(countdown); // 언마운트 , interval을 해제 => React에서 리렌더링이 일어나면 함수가 새로 실행되기 때문이다.
+      // setInterval 함수는 주기적으로 인자를 실행하는 함수,
+      // clearInterval로 초기화
     };
   }, [start, minutes, seconds, rest]);
 
