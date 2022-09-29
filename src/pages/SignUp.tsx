@@ -14,13 +14,15 @@ import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { reduxState } from 'App';
-
+import AlertModal from 'components/Modal/AlertModal';
 const theme = createTheme();
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmed, setPasswordConfirmed] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   const auth = getAuth();
   const navigate = useNavigate();
   const userInfo = useSelector((state: reduxState) => state.user.value);
@@ -54,28 +56,35 @@ export default function SignUp() {
           navigate('/login');
         })
         .catch((error) => {
-          alert(error.message);
+          setIsModalOpen(true);
           if (
             error.message === 'Firebase: Error (auth/email-already-in-use).'
           ) {
-            alert('이미 존재하는 메일입니다.');
+            setModalMessage('이미 존재하는 메일입니다.');
           }
           if (
             error.message ===
             'Firebase: Password should be at least 6 characters (auth/weak-password).'
           ) {
-            alert('비밀번호는 최소 6자리 이상이어야 합니다.');
+            setModalMessage('비밀번호는 최소 6자리 이상이어야 합니다.');
           }
         });
     } else if (password !== passwordConfirmed) {
-      alert('비밀번호가 다릅니다.');
+      setIsModalOpen(true);
+      setModalMessage('비밀번호가 다릅니다.');
     } else {
-      alert('모든값은 필수 입니다.');
+      setIsModalOpen(true);
+      setModalMessage('모든값은 필수 입니다.');
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
+      <AlertModal
+        isModalOpen={isModalOpen}
+        modalMessage={modalMessage}
+        setIsModalOpen={setIsModalOpen}
+      />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

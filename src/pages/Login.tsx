@@ -21,12 +21,15 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { reduxState } from 'App';
+import AlertModal from 'components/Modal/AlertModal';
 
 const theme = createTheme();
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   const auth = getAuth();
   const userProfile = useSelector((state: reduxState) => state.user.value);
   const navigate = useNavigate();
@@ -47,17 +50,23 @@ export default function Login() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!email) {
-      alert('이메일을 입력하세요');
+      setIsModalOpen(true);
+      setModalMessage('이메일을 입력하세요');
+      // alert('이메일을 입력하세요');
     } else if (!password) {
-      alert('비밀번호를 입력하세요');
+      setIsModalOpen(true);
+      setModalMessage('비밀번호를 입력하세요');
+      // alert('비밀번호를 입력하세요');
     } else {
       await signInWithEmailAndPassword(auth, email, password)
         .then(() => navigate('/'))
         .catch((error) => {
           if (error.message === 'Firebase: Error (auth/user-not-found).') {
-            alert('아이디가 없습니다.');
+            setIsModalOpen(true);
+            setModalMessage('아이디가 없습니다.');
           } else {
-            alert('비밀번호가 다릅니다.');
+            setIsModalOpen(true);
+            setModalMessage('비밀번호가 다릅니다.');
           }
         });
     }
@@ -75,6 +84,12 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={theme}>
+      <AlertModal
+        isModalOpen={isModalOpen}
+        modalMessage={modalMessage}
+        setIsModalOpen={setIsModalOpen}
+      />
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
