@@ -20,7 +20,6 @@ const Timer = () => {
   const dayPomo = useSelector((state: reduxState) => state.pomo.value.dayPomo);
   // const userProfile = useSelector((state: reduxState) => state.user.value);
   const dispatch = useDispatch();
-  // const userInfo = useSelector((state: reduxState) => state.user.value);
 
   const startTimer = () => {
     setStart(true);

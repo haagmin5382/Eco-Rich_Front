@@ -15,6 +15,20 @@ const HomeImg = styled.img`
   margin-bottom: 5vw;
 `;
 function Home() {
+  const detectMobileDevice = (agent: string) => {
+    const mobileRegex = [
+      /Android/i,
+      /iPhone/i,
+      /iPad/i,
+      /iPod/i,
+      /BlackBerry/i,
+      /Windows Phone/i,
+    ];
+
+    return mobileRegex.some((mobile) => agent.match(mobile));
+  };
+
+  const isMobile = detectMobileDevice(window.navigator.userAgent); // 모바일 감지
   return (
     <HomeContainer>
       <HomeImg
@@ -31,7 +45,7 @@ function Home() {
           // justifyContent: 'center',
           textAlign: 'center',
           width: '80vw',
-          height: '50vh',
+          height: isMobile ? '40vh' : '50vh',
           // border: '1px solid tomato',
         }}
       >
