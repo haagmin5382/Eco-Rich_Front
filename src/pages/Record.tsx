@@ -83,11 +83,45 @@ function Record() {
       },
     ],
   };
+  const options = {
+    lineTension: 0.4,
+
+    legend: {
+      display: false,
+    },
+    tooltips: {
+      callbacks: {
+        label: function (tooltipItem: any) {
+          return tooltipItem.yLabel;
+        },
+      },
+    },
+    scales: {
+      x: {
+        display: true,
+      },
+      y: {
+        reverse: false,
+
+        ticks: {
+          stepSize: 1,
+        },
+      },
+    },
+    responsive: true, // container(부모 엘리먼트) 크기에 맞춰 차트가 반응형이 될지 말지 여부
+
+    plugins: {
+      title: {
+        display: true,
+        text: '세트 수 기록',
+      },
+    },
+  };
   return (
     <div>
       {userProfile.uid ? (
         id !== 'undefined' ? (
-          <Line data={data} />
+          <Line data={data} options={options} />
         ) : (
           <PageForNotRecording />
         )
