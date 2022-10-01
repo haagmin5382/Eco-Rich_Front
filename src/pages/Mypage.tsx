@@ -15,6 +15,7 @@ import { getAuth, deleteUser } from 'firebase/auth';
 import PageError from './pageForError/PageForNotLogin';
 import AlertModal from 'components/Modal/AlertModal';
 import { setModal } from 'redux/modal';
+import CheckingModal from 'components/Modal/CheckingModal';
 
 const MypageBackground = styled.img`
   position: absolute;
@@ -54,11 +55,12 @@ function Mypage() {
   const user = auth.currentUser;
 
   const userProfile = useSelector((state: reduxState) => state.user.value);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [newDisplayName, setNewDisplayName] = useState(userProfile.displayName);
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordCheck, setNewPasswordCheck] = useState('');
   const [newPhotoURL, setNewPhotoURL] = useState(userProfile.photoURL);
+  const [isCheckingModalOpen, setIsCheckingModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
   const changeDisplayName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
@@ -113,6 +115,7 @@ function Mypage() {
     }
     e.target.value = '';
   };
+
   const editProfile = async () => {
     if (newDisplayName && authService.currentUser !== null) {
       // 닉네임 수정
@@ -142,11 +145,16 @@ function Mypage() {
     ) {
       // 비밀번호 변경
       await updatePassword(authService.currentUser, newPassword);
+      navigate('/');
     } else if (newPassword !== newPasswordCheck) {
       dispatch(
         setModal({ isOpen: true, modalMessage: '비밀번호가 다릅니다.' }),
       );
-    } else if (newPassword.length < 6 && newPasswordCheck.length < 6) {
+    } else if (
+      newPassword.length < 6 &&
+      newPasswordCheck.length < 6 &&
+      newPassword
+    ) {
       dispatch(
         setModal({
           isOpen: true,
@@ -164,10 +172,24 @@ function Mypage() {
     }
     // setIsModalOpen(true);
   };
-
+  // const clickButton = (e: React.MouseEvent<HTMLElement>) => {
+  //   setIsCheckingModalOpen(true);
+  //   const eventTarget = e.target as HTMLInputElement;
+  //   console.log(eventTarget.name);
+  //   if (eventTarget.name === 'editing') {
+  //     setIsEditing(true);
+  //   } else {
+  //     setIsEditing(false);
+  //   }
+  // };
   return (
     <>
       <AlertModal />
+      <CheckingModal
+        isCheckingModalOpen={isCheckingModalOpen}
+        isEditing={isEditing}
+        setIsCheckingModalOpen={setIsCheckingModalOpen}
+      />
       {userProfile.uid ? (
         <>
           <MypageBackground
@@ -254,6 +276,7 @@ function Mypage() {
 
             <Button
               fullWidth
+              name="editing"
               onClick={editProfile}
               sx={{ mt: 3, mb: 2, fontSize: 'large' }}
               variant="contained"
@@ -262,6 +285,7 @@ function Mypage() {
             </Button>
             <Button
               fullWidth
+              name="withdrawal"
               onClick={withdraw}
               sx={{
                 mt: 1,
