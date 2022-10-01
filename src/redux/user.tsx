@@ -9,6 +9,7 @@ export const user = createSlice({
         displayName: '익명',
         photoURL: '',
         uid: '',
+        isOauth: false,
       },
     },
   },

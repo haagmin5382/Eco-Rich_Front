@@ -23,6 +23,7 @@ export interface reduxState {
       email: string;
       photoURL: string;
       uid: string;
+      isOauth: boolean;
     };
   };
 }

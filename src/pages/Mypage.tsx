@@ -5,13 +5,17 @@ import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { authService, storageService } from 'fbase';
-import { updateProfile } from 'firebase/auth';
+import {
+  reauthenticateWithPopup,
+  updatePassword,
+  updateProfile,
+} from 'firebase/auth';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useDispatch } from 'react-redux';
 import { userReducer } from 'redux/user';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
-import { getAuth, deleteUser } from 'firebase/auth';
+import { getAuth, deleteUser, OAuthProvider } from 'firebase/auth';
 import PageError from './pageForError/PageForNotLogin';
 // import AlertModal from 'components/Modal/AlertModal';
 
@@ -55,12 +59,25 @@ function Mypage() {
   const userProfile = useSelector((state: reduxState) => state.user.value);
   // const [isModalOpen, setIsModalOpen] = useState(false);
   const [newDisplayName, setNewDisplayName] = useState(userProfile.displayName);
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordCheck, setNewPasswordCheck] = useState('');
   const [newPhotoURL, setNewPhotoURL] = useState(userProfile.photoURL);
   const changeDisplayName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
     } = e;
     setNewDisplayName(value);
+  };
+  const changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { name, value },
+    } = e;
+
+    if (name === 'newPassword') {
+      setNewPassword(value);
+    } else {
+      setNewPasswordCheck(value);
+    }
   };
 
   const refreshUser = () => {
@@ -71,6 +88,7 @@ function Mypage() {
         displayName: user?.displayName,
         photoURL: user?.photoURL,
         uid: user?.uid,
+        isOauth: user?.providerData[0].providerId === 'password' ? false : true,
       }),
     );
   };
@@ -116,6 +134,14 @@ function Mypage() {
       await updateProfile(authService.currentUser, {
         photoURL: attachmentURL || newPhotoURL,
       });
+    }
+    if (
+      newPassword.length >= 6 &&
+      newPasswordCheck.length >= 6 &&
+      newPassword === newPasswordCheck &&
+      authService.currentUser !== null
+    ) {
+      await updatePassword(authService.currentUser, newPassword);
     }
     refreshUser();
   };
@@ -176,6 +202,42 @@ function Mypage() {
                 borderRadius: '10px',
               }}
             />
+            {userProfile.isOauth ? null : (
+              <div>
+                <TextField
+                  autoComplete="newPassword"
+                  fullWidth
+                  id="newPassword"
+                  label={'비밀번호'}
+                  margin="normal"
+                  name="newPassword"
+                  onChange={changePassword}
+                  required
+                  sx={{
+                    fontSize: 'small',
+                    backgroundColor: '#ffffff',
+                    borderRadius: '10px',
+                  }}
+                  type="password"
+                />
+                <TextField
+                  autoComplete="newPasswordCheck"
+                  fullWidth
+                  id="newPasswordCheck"
+                  label={'비밀번호 확인'}
+                  margin="normal"
+                  name="newPasswordCheck"
+                  onChange={changePassword}
+                  required
+                  sx={{
+                    fontSize: 'small',
+                    backgroundColor: '#ffffff',
+                    borderRadius: '10px',
+                  }}
+                  type="password"
+                />
+              </div>
+            )}
 
             <Button
               fullWidth
