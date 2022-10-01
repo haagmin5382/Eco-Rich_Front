@@ -118,7 +118,7 @@ function Record() {
     },
   };
   return (
-    <div>
+    <main>
       {userProfile.uid ? (
         id !== 'undefined' ? (
           <Line data={data} options={options} />
@@ -128,7 +128,7 @@ function Record() {
       ) : (
         <PageError />
       )}
-    </div>
+    </main>
   );
 }
 

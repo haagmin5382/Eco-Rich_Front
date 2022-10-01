@@ -23,6 +23,13 @@ export interface reduxState {
       email: string;
       photoURL: string;
       uid: string;
+      isOauth: boolean;
+    };
+  };
+  modal: {
+    value: {
+      isOpen: boolean;
+      modalMessage: string;
     };
   };
 }

@@ -19,18 +19,21 @@ function Router() {
   const dispatch = useDispatch();
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
+      console.log(user?.providerData[0].providerId);
       dispatch(
         userReducer({
           email: user?.email,
           displayName: user?.displayName || '익명',
           photoURL: user?.photoURL,
           uid: user?.uid,
+          isOauth:
+            user?.providerData[0].providerId === 'password' ? false : true,
         }),
       );
     }); // 사용자 로그인 상태의 변화를 관찰한다.
   }, []);
   return (
-    <div>
+    <>
       <BrowserRouter>
         <Side />
         <Header />
@@ -45,7 +48,7 @@ function Router() {
           <Route element={<Record />} path="/record/:id" />
         </Routes>
       </BrowserRouter>
-    </div>
+    </>
   );
 }
 

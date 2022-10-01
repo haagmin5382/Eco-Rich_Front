@@ -1,20 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const user = createSlice({
-  name: 'user',
+export const modalSlice = createSlice({
+  name: 'modal',
   initialState: {
     value: {
-      user: {
-        email: '',
-        displayName: '익명',
-        photoURL: '',
-        uid: '',
-        isOauth: false,
-      },
+      isOpen: false,
+      modalMessage: '',
     },
   },
   reducers: {
-    userReducer: (state, action) => {
+    setModal: (state, action) => {
       state.value = action.payload;
     },
   },
@@ -24,5 +19,5 @@ export const user = createSlice({
 // initialState => 데이터의 초기값
 // reducers => 상태가 변하면 어떻게 실행되는지 정한다.
 
-export const { userReducer } = user.actions;
-export default user.reducer;
+export const { setModal } = modalSlice.actions;
+export default modalSlice.reducer;
