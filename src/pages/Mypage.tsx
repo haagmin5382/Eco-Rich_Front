@@ -5,19 +5,16 @@ import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { authService, storageService } from 'fbase';
-import {
-  reauthenticateWithPopup,
-  updatePassword,
-  updateProfile,
-} from 'firebase/auth';
+import { updatePassword, updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useDispatch } from 'react-redux';
 import { userReducer } from 'redux/user';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
-import { getAuth, deleteUser, OAuthProvider } from 'firebase/auth';
+import { getAuth, deleteUser } from 'firebase/auth';
 import PageError from './pageForError/PageForNotLogin';
-// import AlertModal from 'components/Modal/AlertModal';
+import AlertModal from 'components/Modal/AlertModal';
+import { setModal } from 'redux/modal';
 
 const MypageBackground = styled.img`
   position: absolute;
@@ -118,6 +115,7 @@ function Mypage() {
   };
   const editProfile = async () => {
     if (newDisplayName && authService.currentUser !== null) {
+      // 닉네임 수정
       await updateProfile(authService.currentUser, {
         displayName: newDisplayName,
       });
@@ -127,6 +125,7 @@ function Mypage() {
       userProfile.photoURL !== newPhotoURL &&
       authService.currentUser !== null
     ) {
+      // 프로필 사진 변경
       const attachmentRef: any = ref(storageService, `${userProfile.uid}`);
       await uploadString(attachmentRef, newPhotoURL, 'data_url');
 
@@ -141,8 +140,21 @@ function Mypage() {
       newPassword === newPasswordCheck &&
       authService.currentUser !== null
     ) {
+      // 비밀번호 변경
       await updatePassword(authService.currentUser, newPassword);
+    } else if (newPassword !== newPasswordCheck) {
+      dispatch(
+        setModal({ isOpen: true, modalMessage: '비밀번호가 다릅니다.' }),
+      );
+    } else if (newPassword.length < 6 && newPasswordCheck.length < 6) {
+      dispatch(
+        setModal({
+          isOpen: true,
+          modalMessage: '비밀번호는 최소 6자리 이상이어야 합니다.',
+        }),
+      );
     }
+
     refreshUser();
   };
   const withdraw = async () => {
@@ -155,6 +167,7 @@ function Mypage() {
 
   return (
     <>
+      <AlertModal />
       {userProfile.uid ? (
         <>
           <MypageBackground

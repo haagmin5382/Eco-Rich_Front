@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import menuReducer from './menu';
 import pomoReducer from './pomo';
 import userReducer from './user';
+import modalSlice from './modal';
 import {
   persistReducer,
   FLUSH,
@@ -25,6 +26,7 @@ export default configureStore({
     menu: menuReducer,
     pomo: persistedReducer,
     user: userReducer,
+    modal: modalSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

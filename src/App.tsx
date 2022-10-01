@@ -26,6 +26,12 @@ export interface reduxState {
       isOauth: boolean;
     };
   };
+  modal: {
+    value: {
+      isOpen: boolean;
+      modalMessage: string;
+    };
+  };
 }
 function App() {
   return (

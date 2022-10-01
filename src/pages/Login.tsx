@@ -19,18 +19,20 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { reduxState } from 'App';
 import AlertModal from 'components/Modal/AlertModal';
+import { setModal } from 'redux/modal';
 
 const theme = createTheme();
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
   const auth = getAuth();
+  const dispatch = useDispatch();
+  // const modalState = useSelector((state: reduxState) => state.modal.value);
+
   const userProfile = useSelector((state: reduxState) => state.user.value);
   const navigate = useNavigate();
   if (userProfile.uid) {
@@ -50,23 +52,29 @@ export default function Login() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!email) {
-      setIsModalOpen(true);
-      setModalMessage('이메일을 입력하세요');
+      dispatch(
+        setModal({ isOpen: true, modalMessage: '이메일을 입력하세요.' }),
+      );
+
       // alert('이메일을 입력하세요');
     } else if (!password) {
-      setIsModalOpen(true);
-      setModalMessage('비밀번호를 입력하세요');
+      dispatch(
+        setModal({ isOpen: true, modalMessage: '비밀번호를 입력하세요.' }),
+      );
+
       // alert('비밀번호를 입력하세요');
     } else {
       await signInWithEmailAndPassword(auth, email, password)
         .then(() => navigate('/'))
         .catch((error) => {
           if (error.message === 'Firebase: Error (auth/user-not-found).') {
-            setIsModalOpen(true);
-            setModalMessage('아이디가 없습니다.');
+            dispatch(
+              setModal({ isOpen: true, modalMessage: '아이디가 없습니다.' }),
+            );
           } else {
-            setIsModalOpen(true);
-            setModalMessage('비밀번호가 다릅니다.');
+            dispatch(
+              setModal({ isOpen: true, modalMessage: '비밀번호가 다릅니다.' }),
+            );
           }
         });
     }
@@ -84,11 +92,7 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AlertModal
-        isModalOpen={isModalOpen}
-        modalMessage={modalMessage}
-        setIsModalOpen={setIsModalOpen}
-      />
+      <AlertModal />
 
       <Container component="main" maxWidth="xs">
         <CssBaseline />
