@@ -14,12 +14,12 @@ import Board from 'pages/board/Board';
 import Writing from 'pages/board/Writing';
 import Posted from 'pages/board/Posted';
 import Record from 'pages/Record';
+import FindingPassword from 'pages/FindingPassword';
 
 function Router() {
   const dispatch = useDispatch();
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
-      console.log(user?.providerData[0].providerId);
       dispatch(
         userReducer({
           email: user?.email,
@@ -46,6 +46,7 @@ function Router() {
           <Route element={<Writing />} path="/board/writing" />
           <Route element={<Posted />} path="/board/:id" />
           <Route element={<Record />} path="/record/:id" />
+          <Route element={<FindingPassword />} path="/PasswordFind" />
         </Routes>
       </BrowserRouter>
     </>

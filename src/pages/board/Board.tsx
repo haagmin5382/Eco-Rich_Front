@@ -42,7 +42,7 @@ export default function Board() {
   ]);
   const auth = getAuth();
   const user = auth.currentUser;
-  console.log(posts);
+
   useEffect(() => {
     onSnapshot(collection(dbService, 'board'), (snapShot) => {
       const postArray = snapShot.docs.map((doc) => ({
