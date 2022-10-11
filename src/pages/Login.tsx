@@ -157,10 +157,15 @@ export default function Login() {
               <GoogleIcon sx={{ marginRight: '1vw' }} />
               Google 로그인
             </Button>
-            <Grid container>
+            <Grid container sx={{ justifyContent: 'space-between' }}>
               <Grid item>
                 <Link href="/signup" variant="body2">
                   회원 가입
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="/PasswordFind" variant="body2">
+                  비밀번호 찾기
                 </Link>
               </Grid>
             </Grid>
