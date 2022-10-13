@@ -28,6 +28,7 @@ function Router() {
           uid: user?.uid,
           isOauth:
             user?.providerData[0].providerId === 'password' ? false : true,
+          emailVerfied: user?.emailVerified,
         }),
       );
     }); // 사용자 로그인 상태의 변화를 관찰한다.

@@ -10,6 +10,7 @@ export const user = createSlice({
         photoURL: '',
         uid: '',
         isOauth: false,
+        emailVerified: false,
       },
     },
   },

@@ -24,6 +24,7 @@ export interface reduxState {
       photoURL: string;
       uid: string;
       isOauth: boolean;
+      emailVerifed: boolean;
     };
   };
   modal: {
