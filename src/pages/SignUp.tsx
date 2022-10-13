@@ -10,7 +10,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { reduxState } from 'App';
@@ -25,12 +29,14 @@ export default function SignUp() {
   const [passwordConfirmed, setPasswordConfirmed] = useState('');
   const dispatch = useDispatch();
   const auth = getAuth();
+  const user = auth.currentUser;
   const navigate = useNavigate();
   const userInfo = useSelector((state: reduxState) => state.user.value);
 
   if (userInfo.uid) {
     window.location.href = '/'; // 로그인 한 유저가 이 페이지에 들어오면 홈으로 보낸다.
   }
+
   const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
@@ -133,6 +139,7 @@ export default function SignUp() {
                   required
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   autoComplete="new-password"

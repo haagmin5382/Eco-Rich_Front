@@ -10,6 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { dbService } from 'fbase';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { commentType } from './Posted';
+import { useDispatch, useSelector } from 'react-redux';
+import { reduxState } from 'App';
+import { setModal } from 'redux/modal';
+import EmailVerifying from 'components/Modal/EmailVerifying';
 
 const BoardContainer = styled.div`
   width: 80vw;
@@ -42,7 +46,8 @@ export default function Board() {
   ]);
   const auth = getAuth();
   const user = auth.currentUser;
-
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state: reduxState) => state.user.value);
   useEffect(() => {
     onSnapshot(collection(dbService, 'board'), (snapShot) => {
       const postArray = snapShot.docs.map((doc) => ({
@@ -56,13 +61,23 @@ export default function Board() {
 
   const writePosting = () => {
     if (user) {
-      navigate('/board/writing');
+      if (user.emailVerified) {
+        navigate('/board/writing');
+      } else {
+        dispatch(
+          setModal({
+            isOpen: true,
+            modalMessage: '이메일 인증을 먼저 해주세요',
+          }),
+        );
+      }
     } else {
       navigate('/login');
     }
   };
   return (
     <main>
+      <EmailVerifying />
       <BoardContainer>
         <Box
           sx={{
