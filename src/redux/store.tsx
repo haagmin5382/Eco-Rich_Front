@@ -3,6 +3,7 @@ import menuReducer from './menu';
 import pomoReducer from './pomo';
 import userReducer from './user';
 import modalSlice from './modal';
+import toDoReducer from './toDoLists';
 import {
   persistReducer,
   FLUSH,
@@ -27,6 +28,7 @@ export default configureStore({
     pomo: persistedReducer,
     user: userReducer,
     modal: modalSlice,
+    toDoList: toDoReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
