@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Fab from '@mui/material/Fab';
+import NavigationIcon from '@mui/icons-material/Navigation';
+import { useSelector, useDispatch } from 'react-redux';
+
 const ToDoListContainer = styled.div`
   background-color: #2ba45c;
   color: #ffffff;
   padding-top: 3vh;
+  padding-bottom: 3vh;
   h1 {
     /* padding-top: 1vh; */
   }
@@ -22,12 +26,25 @@ const ToDoLists = styled.ul`
   margin: 0;
   margin-left: 6vw;
 `;
+const ToDoList = styled.li`
+  width: 68vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ffffff;
+  margin-top: 1vh;
+  cursor: pointer;
+  &:hover {
+    background-color: tomato;
+  }
+`;
 
 function ToDotList() {
   interface toDoType {
     isFinished: boolean;
     toDo: string;
   }
+  const dispatch = useDispatch();
   const [toDo, setToDo] = useState({ isFinished: false, toDo: '' });
   const [lists, setLists] = useState<Array<toDoType>>([]);
 
@@ -39,7 +56,7 @@ function ToDotList() {
     setToDo({ isFinished: false, toDo: value });
   };
   const addList = () => {
-    if (toDo) {
+    if (toDo.toDo) {
       setLists([...lists, toDo]);
     }
   };
@@ -53,7 +70,7 @@ function ToDotList() {
     });
     setLists(changedList);
   };
-  console.log(lists);
+
   const deleteList = (idx: number) => {
     const filteredList = lists.filter((str, index) => index !== idx);
     setLists(filteredList);
@@ -65,11 +82,15 @@ function ToDotList() {
         id="custom-css-outlined-input"
         label="오늘 할 일"
         onChange={inputToDo}
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === 'Enter') {
+            addList();
+          }
+        }}
         sx={{
           input: { color: 'white' },
           width: '70vw',
           margin: '0 atuo',
-          border: '1px solid #ffffff',
           color: 'white',
         }}
         value={toDo.toDo}
@@ -86,34 +107,26 @@ function ToDotList() {
       </div>
       <ToDoLists>
         {lists.map((obj: any, idx: number) => (
-          <li key={idx}>
-            <FormControlLabel
-              color="success"
-              control={
-                <Checkbox
-                  onClick={() => checkList(idx)}
-                  sx={{
-                    color: 'white',
-                    '&.Mui-checked': {
-                      color: 'white',
-                    },
-                  }}
-                />
-              }
-              label={obj.toDo}
+          <ToDoList key={idx}>
+            <Checkbox
+              onClick={() => checkList(idx)}
               sx={{
-                fontWeight: 'bold',
-                // textDecoration: ischecked.
+                color: 'white',
+                '&.Mui-checked': {
+                  color: 'white',
+                },
               }}
             />
+            <span>{obj.toDo}</span>
             <IconButton
               aria-label="delete"
               onClick={() => deleteList(idx)}
               size="small"
+              sx={{ color: '#757372' }}
             >
               <DeleteIcon fontSize="inherit" />
             </IconButton>
-          </li>
+          </ToDoList>
         ))}
       </ToDoLists>
     </ToDoListContainer>
