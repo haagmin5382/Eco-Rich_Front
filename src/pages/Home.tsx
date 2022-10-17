@@ -16,20 +16,20 @@ const HomeImg = styled.img`
   z-index: -100;
 `;
 function Home() {
-  const detectMobileDevice = (agent: string) => {
-    const mobileRegex = [
-      /Android/i,
-      /iPhone/i,
-      /iPad/i,
-      /iPod/i,
-      /BlackBerry/i,
-      /Windows Phone/i,
-    ];
+  // const detectMobileDevice = (agent: string) => {
+  //   const mobileRegex = [
+  //     /Android/i,
+  //     /iPhone/i,
+  //     /iPad/i,
+  //     /iPod/i,
+  //     /BlackBerry/i,
+  //     /Windows Phone/i,
+  //   ];
 
-    return mobileRegex.some((mobile) => agent.match(mobile));
-  };
+  //   return mobileRegex.some((mobile) => agent.match(mobile));
+  // };
 
-  const isMobile = detectMobileDevice(window.navigator.userAgent); // 모바일 감지
+  // const isMobile = detectMobileDevice(window.navigator.userAgent); // 모바일 감지
   return (
     <HomeContainer>
       <HomeImg

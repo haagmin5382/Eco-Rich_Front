@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Fab from '@mui/material/Fab';
-import NavigationIcon from '@mui/icons-material/Navigation';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { reduxState } from 'App';
+import { doc, setDoc, getDoc, collection, deleteDoc } from 'firebase/firestore';
 
 const ToDoListContainer = styled.div`
-  background-color: #2ba45c;
+  background-color: tomato;
   color: #ffffff;
   padding-top: 3vh;
   padding-bottom: 3vh;
@@ -35,7 +35,7 @@ const ToDoList = styled.li`
   margin-top: 1vh;
   cursor: pointer;
   &:hover {
-    background-color: tomato;
+    background-color: #2ba45c;
   }
 `;
 
@@ -44,7 +44,7 @@ function ToDotList() {
     isFinished: boolean;
     toDo: string;
   }
-  const dispatch = useDispatch();
+  const user = useSelector((state: reduxState) => state.user.value);
   const [toDo, setToDo] = useState({ isFinished: false, toDo: '' });
   const [lists, setLists] = useState<Array<toDoType>>([]);
 
@@ -56,11 +56,13 @@ function ToDotList() {
     setToDo({ isFinished: false, toDo: value });
   };
   const addList = () => {
+    // toDoList 추가
     if (toDo.toDo) {
       setLists([...lists, toDo]);
     }
   };
   const checkList = (idx: number) => {
+    // toDoList 체크
     const changedList = lists.map((obj, index) => {
       if (idx === index) {
         return { isFinished: !obj.isFinished, toDo: obj.toDo };
@@ -72,9 +74,13 @@ function ToDotList() {
   };
 
   const deleteList = (idx: number) => {
+    // toDoList 제거
     const filteredList = lists.filter((str, index) => index !== idx);
     setLists(filteredList);
   };
+  // useEffect(() => {
+  //   console.log(lists);
+  // }, [lists]);
 
   return (
     <ToDoListContainer>
@@ -83,7 +89,7 @@ function ToDotList() {
         label="오늘 할 일"
         onChange={inputToDo}
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === 'Enter') {
+          if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
             addList();
           }
         }}
