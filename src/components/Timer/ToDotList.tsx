@@ -20,6 +20,7 @@ import {
   where,
   getDocs,
   orderBy,
+  updateDoc,
 } from 'firebase/firestore';
 import { today } from './Timer';
 
@@ -92,19 +93,17 @@ function ToDotList() {
     }
   };
 
-  const checkList = (idx: number) => {
+  const checkList = async (id: string) => {
     // toDoList 체크
-    const changedList = lists.map((obj, index) => {
-      if (idx === index) {
-        return { isFinished: !obj.isFinished, toDo: obj.toDo };
-      } else {
-        return obj;
-      }
-    });
-    // setLists(changedList);
-  };
+    const memoDoc = doc(dbService, 'memo', id);
+    const memoRef = collection(dbService, 'memo');
+    const selected = await getDoc(doc(memoRef, id));
 
-  const deleteList = async (idx: number) => {
+    await updateDoc(memoDoc, {
+      isFinished: !selected?.data()?.isFinished,
+    });
+  };
+  const deleteList = async (id: string) => {
     // toDoList 제거
     const memoRef = collection(dbService, 'memo');
     const q = await query(
@@ -112,7 +111,7 @@ function ToDotList() {
       where('creatorId', '==', user.uid),
       orderBy('createdAt', 'desc'),
     );
-    // await deleteDoc(doc(memoRef, ''));
+    await deleteDoc(doc(dbService, 'memo', id));
   };
 
   const refreshData = async () => {
@@ -125,14 +124,17 @@ function ToDotList() {
     );
 
     onSnapshot(q, (querySnapshot) => {
-      const memoArray = querySnapshot.docs.map((doc) => doc.data());
+      const memoArray = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       //  querySnapshot.forEach((doc) => doc.data());
       if (memoArray) {
         setLists(memoArray as any);
       }
     });
   };
-  console.log(lists);
+
   useEffect(() => {
     if (user.uid) {
       refreshData();
@@ -173,7 +175,7 @@ function ToDotList() {
         {lists.map((obj: any, idx: number) => (
           <ToDoList key={idx}>
             <Checkbox
-              onClick={() => checkList(idx)}
+              onClick={() => checkList(obj.id)}
               sx={{
                 color: 'white',
                 '&.Mui-checked': {
@@ -184,7 +186,7 @@ function ToDotList() {
             <span>{obj.toDo}</span>
             <IconButton
               aria-label="delete"
-              onClick={() => deleteList(idx)}
+              onClick={() => deleteList(obj.id)}
               size="small"
               sx={{ color: '#757372' }}
             >
