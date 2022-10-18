@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
@@ -7,7 +7,21 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelector } from 'react-redux';
 import { reduxState } from 'App';
-import { doc, setDoc, getDoc, collection, deleteDoc } from 'firebase/firestore';
+import { dbService } from 'fbase';
+import {
+  doc,
+  addDoc,
+  setDoc,
+  getDoc,
+  collection,
+  deleteDoc,
+  onSnapshot,
+  query,
+  where,
+  getDocs,
+  orderBy,
+} from 'firebase/firestore';
+import { today } from './Timer';
 
 const ToDoListContainer = styled.div`
   background-color: tomato;
@@ -40,13 +54,21 @@ const ToDoList = styled.li`
 `;
 
 function ToDotList() {
-  interface toDoType {
-    isFinished: boolean;
+  interface postsType {
+    writer: string;
     toDo: string;
+    isFinished: boolean;
+    today: string;
+    createdAt: number;
+    creatorId: string; // 로그인할 때  유저정보를 받아온다.
   }
   const user = useSelector((state: reduxState) => state.user.value);
   const [toDo, setToDo] = useState({ isFinished: false, toDo: '' });
-  const [lists, setLists] = useState<Array<toDoType>>([]);
+  const [lists, setLists] = useState<Array<postsType>>([]);
+  const date = new Date();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const now = today + ` ${hours}시 ${minutes}분`;
 
   const inputToDo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -55,12 +77,21 @@ function ToDotList() {
 
     setToDo({ isFinished: false, toDo: value });
   };
-  const addList = () => {
+  const addList = async () => {
     // toDoList 추가
     if (toDo.toDo) {
-      setLists([...lists, toDo]);
+      const writing = {
+        writer: user.displayName,
+        toDo: toDo.toDo,
+        isFinished: toDo.isFinished,
+        today: now,
+        createdAt: Date.now(),
+        creatorId: user.uid, // 로그인할 때  유저정보를 받아온다.
+      };
+      await addDoc(collection(dbService, 'memo'), writing);
     }
   };
+
   const checkList = (idx: number) => {
     // toDoList 체크
     const changedList = lists.map((obj, index) => {
@@ -70,17 +101,43 @@ function ToDotList() {
         return obj;
       }
     });
-    setLists(changedList);
+    // setLists(changedList);
   };
 
-  const deleteList = (idx: number) => {
+  const deleteList = async (idx: number) => {
     // toDoList 제거
-    const filteredList = lists.filter((str, index) => index !== idx);
-    setLists(filteredList);
+    const memoRef = collection(dbService, 'memo');
+    const q = await query(
+      memoRef,
+      where('creatorId', '==', user.uid),
+      orderBy('createdAt', 'desc'),
+    );
+    // await deleteDoc(doc(memoRef, ''));
   };
-  // useEffect(() => {
-  //   console.log(lists);
-  // }, [lists]);
+
+  const refreshData = async () => {
+    // 실시간 데이터 처리
+    const memoRef = collection(dbService, 'memo');
+    const q = await query(
+      memoRef,
+      where('creatorId', '==', user.uid),
+      orderBy('createdAt', 'desc'),
+    );
+
+    onSnapshot(q, (querySnapshot) => {
+      const memoArray = querySnapshot.docs.map((doc) => doc.data());
+      //  querySnapshot.forEach((doc) => doc.data());
+      if (memoArray) {
+        setLists(memoArray as any);
+      }
+    });
+  };
+  console.log(lists);
+  useEffect(() => {
+    if (user.uid) {
+      refreshData();
+    }
+  }, [user.uid]);
 
   return (
     <ToDoListContainer>
@@ -90,6 +147,7 @@ function ToDotList() {
         onChange={inputToDo}
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+            // isComposing으로 한글을 입력했을 때 onKeyDown 버그 수정
             addList();
           }
         }}
@@ -109,7 +167,7 @@ function ToDotList() {
         </IconButton>
       </div>
       <div>
-        {lists.filter((obj) => obj.isFinished).length} / {lists.length}
+        {lists.filter((obj) => obj.isFinished)?.length} / {lists?.length}
       </div>
       <ToDoLists>
         {lists.map((obj: any, idx: number) => (
