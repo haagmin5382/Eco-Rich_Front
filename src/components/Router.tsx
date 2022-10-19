@@ -15,6 +15,7 @@ import Writing from 'pages/board/Writing';
 import Posted from 'pages/board/Posted';
 import Record from 'pages/Record';
 import FindingPassword from 'pages/FindingPassword';
+import SupportChat from './Chat/SupportChat';
 
 function Router() {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ function Router() {
           <Route element={<Record />} path="/record/:id" />
           <Route element={<FindingPassword />} path="/PasswordFind" />
         </Routes>
+        <SupportChat />
       </BrowserRouter>
     </>
   );
